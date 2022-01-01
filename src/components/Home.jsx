@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Container, Row, Col, Form, Button,
+  Container, Row, Col, Form, Button, Nav, InputGroup, ButtonGroup,
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -75,6 +75,7 @@ const Home = () => {
       });
       socket.on('newMessage', (newMessageFromServer) => {
         console.log(newMessageFromServer);
+        dispatch(addMessage(newMessageFromServer));
         socket.disconnect();
       });
     },
@@ -84,14 +85,23 @@ const Home = () => {
     if (!channels) {
       return null;
     }
+
     return (
-      <ul>
+      <Nav variant="pils" className="flex-column">
         {channels.map((ch) => (
-          <li key={ch.id}>
-            <Button onClick={() => handleSwitchChannel(ch.id)}>{`${ch.name}`}</Button>
-          </li>
+          <Nav.Item key={ch.id} className="w-100">
+            <Button
+              variant={ch.id === currentChannelId ? 'secondary' : ''}
+              size="sm"
+              active={ch.id === currentChannelId}
+              onClick={() => handleSwitchChannel(ch.id)}
+            >
+              <span className="m-1">#</span>
+              {ch.name}
+            </Button>
+          </Nav.Item> // change classes
         ))}
-      </ul>
+      </Nav>
     );
   };
 
@@ -112,11 +122,18 @@ const Home = () => {
 
     const messageElems = messageSelector
       .filter((item) => item.channelId === currentChannelId)
-      .map((item) => <p key={item.id}>{item.text}</p>); // add filter
+      .map((item) => (
+        <li
+          className="list-group-item d-flex"
+          key={item.id}
+        >
+          <span className="mr-auto">{item.text}</span>
+        </li>
+      )); // change tags ui  from ex toolkit
 
     return (
-      <div>
-        <ul>
+      <div className="mt-3">
+        <ul className="list-group">
           {messageElems}
         </ul>
       </div>
@@ -136,14 +153,13 @@ const Home = () => {
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <CurrentChannel />
                 <MessagesBox />
-                <Button onClick={handleTestSocket}>TestSocket</Button>
+                <Button onClick={handleTestSocket}>Reset</Button>
               </div>
-              <div className="mt-auto px-5 py-3">
-                <Form className="py-1 border-0 rounded-2" onSubmit={formik.handleSubmit}>
+              <div className="mt-auto px-5 py-3 flex">
+                <Form className="py-1 border-0 rounded-2 flex" onSubmit={formik.handleSubmit}>
                   <Form.Group>
                     <Form.Label />
                     <Form.Control
-                      className="p-0 ps-2"
                       onChange={formik.handleChange}
                       value={formik.values.body.text}
                       placeholder="message text"
@@ -152,7 +168,9 @@ const Home = () => {
                       required
                     />
                   </Form.Group>
-                  <Button type="submit">Submit</Button>
+                  <ButtonGroup>
+                    <Button type="submit" variant="outline-secondary">Submit</Button>
+                  </ButtonGroup>
                 </Form>
               </div>
             </div>
