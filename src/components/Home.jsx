@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Container, Row, Col, Form, Button, Nav, InputGroup, ButtonGroup,
+  Container, Row, Col, Form, Button, Nav, ButtonGroup,
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -43,7 +43,7 @@ const Home = () => {
     fetchContent();
   }, []);
 
-  const { channels, currentChannelId, messages } = chat;
+  const { channels, currentChannelId } = chat;
 
   const socket = io();
 
@@ -120,7 +120,13 @@ const Home = () => {
 
     const messageSelector = useSelector((state) => state.chat.chat.messages);
 
-    const messageElems = messageSelector
+    const [messagesFromServer, loadMessagesFromServer] = useState(messageSelector);
+
+    useEffect(() => {
+      loadMessagesFromServer(messageSelector);
+    }, [messageSelector]);
+
+    const messageElems = messagesFromServer
       .filter((item) => item.channelId === currentChannelId)
       .map((item) => (
         <li
