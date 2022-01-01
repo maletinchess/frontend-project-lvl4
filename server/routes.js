@@ -19,6 +19,7 @@ const buildState = (defaultState) => {
     currentChannelId: generalChannelId,
     users: [
       { id: 1, username: 'admin', password: 'admin' },
+      { id: 2, username: 'user1', password: 'user1' },
     ],
   };
 
@@ -122,6 +123,7 @@ export default (app, defaultState = {}) => {
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {
     const user = state.users.find(({ id }) => id === req.user.userId);
+    console.log(req);
 
     if (!user) {
       reply.send(new Unauthorized());

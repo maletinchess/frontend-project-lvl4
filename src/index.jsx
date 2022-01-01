@@ -4,13 +4,17 @@ import 'regenerator-runtime/runtime.js';
 
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { Provider } from 'react-redux';
 
 import Component from './components/App.jsx';
+import store from './slices/index.js';
 
 import '../assets/application.scss';
 
 ReactDOM.render(
-  <Component />,
+  <Provider store={store}>
+    <Component />
+  </Provider>,
   document.querySelector('#chat'),
 );
 
