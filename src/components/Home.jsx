@@ -124,7 +124,7 @@ const Home = () => {
 
     useEffect(() => {
       loadMessagesFromServer(messageSelector);
-    }, [messageSelector]);
+    }, [messagesFromServer]);
 
     const messageElems = messagesFromServer
       .filter((item) => item.channelId === currentChannelId)
