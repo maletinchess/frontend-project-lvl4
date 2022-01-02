@@ -74,9 +74,12 @@ const Home = () => {
         text, channelId: currentChannelId,
       };
       socket.emit('newMessage', newMessage, (response) => {
-        console.log(response);
-        const { data } = response;
-        dispatch(addMessage(data));
+        console.log(response.status);
+      });
+      socket.on('newMessage', (newMessageFromServer) => {
+        console.log(newMessageFromServer);
+        console.log(chat.messages);
+        dispatch(addMessage(newMessageFromServer));
       });
     },
   });
