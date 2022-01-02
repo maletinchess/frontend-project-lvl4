@@ -47,8 +47,11 @@ const Home = () => {
 
   const socket = io();
 
-  const handleTestSocket = () => {
-    dispatch(resetMessages());
+  const handleResetMessages = () => {
+    socket.on('connect', () => {
+      console.log(socket.id);
+    });
+    socket.emit('reset');
   };
 
   const handleSwitchChannel = (id) => {
@@ -73,7 +76,9 @@ const Home = () => {
       socket.emit('newMessage', newMessage, (response) => {
         console.log(response.status);
       });
-      socket.on('newMessage', (newMessageFromServer) => {
+      socket.once('newMessage', (newMessageFromServer) => {
+        console.log(newMessageFromServer);
+        console.log(chat.messages);
         dispatch(addMessage(newMessageFromServer));
       });
     },
@@ -112,11 +117,10 @@ const Home = () => {
   };
 
   const MessagesBox = () => {
-    if (!channels) {
+    const messages = useSelector((state) => state.chat.chat.messages);
+    if (!messages) {
       return null;
     }
-
-    const messages = useSelector((state) => state.chat.chat.messages);
 
     const messageElems = messages
       .filter((item) => item.channelId === currentChannelId)
@@ -151,7 +155,7 @@ const Home = () => {
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <CurrentChannel />
                 <MessagesBox />
-                <Button onClick={handleTestSocket}>Reset</Button>
+                <Button onClick={handleResetMessages}>Reset all msg</Button>
               </div>
               <div className="mt-auto px-5 py-3 flex">
                 <Form className="py-1 border-0 rounded-2 flex" onSubmit={formik.handleSubmit}>

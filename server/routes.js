@@ -45,6 +45,10 @@ export default (app, defaultState = {}) => {
   app.io.on('connect', (socket) => {
     console.log({ 'socket.id': socket.id });
 
+    socket.on('reset', () => {
+      state.messages = [];
+    });
+
     socket.on('newMessage', (message, acknowledge = _.noop) => {
       const messageWithId = {
         ...message,
