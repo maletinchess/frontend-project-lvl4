@@ -71,12 +71,10 @@ const Home = () => {
         text, channelId: currentChannelId,
       };
       socket.emit('newMessage', newMessage, (response) => {
-        console.log(response);
+        console.log(response.status);
       });
       socket.on('newMessage', (newMessageFromServer) => {
-        console.log(newMessageFromServer);
         dispatch(addMessage(newMessageFromServer));
-        socket.disconnect();
       });
     },
   });
@@ -118,15 +116,9 @@ const Home = () => {
       return null;
     }
 
-    const messageSelector = useSelector((state) => state.chat.chat.messages);
+    const messages = useSelector((state) => state.chat.chat.messages);
 
-    const [messagesFromServer, loadMessagesFromServer] = useState(messageSelector);
-
-    useEffect(() => {
-      loadMessagesFromServer(messageSelector);
-    }, [messagesFromServer]);
-
-    const messageElems = messagesFromServer
+    const messageElems = messages
       .filter((item) => item.channelId === currentChannelId)
       .map((item) => (
         <li
@@ -135,7 +127,7 @@ const Home = () => {
         >
           <span className="mr-auto">{item.text}</span>
         </li>
-      )); // change tags ui  from ex toolkit
+      ));
 
     return (
       <div className="mt-3">
