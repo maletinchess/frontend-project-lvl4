@@ -23,6 +23,7 @@ const getAuthHeader = () => {
 };
 
 const Home = () => {
+  const socket = io();
   const chat = useSelector((state) => state.chat.chat);
   const dispatch = useDispatch();
 
@@ -41,11 +42,14 @@ const Home = () => {
     };
 
     fetchContent();
+
+    socket.on('newMessage', (newMessageFromServer) => {
+      console.log(newMessageFromServer);
+      dispatch(addMessage(newMessageFromServer));
+    });
   }, []);
 
   const { channels, currentChannelId } = chat;
-
-  const socket = io();
 
   const handleResetMessages = () => {
     socket.on('connect', () => {
@@ -67,7 +71,7 @@ const Home = () => {
     },
     onSubmit: (values) => {
       socket.on('connect', () => {
-        console.log(socket.id);
+        console.log(socket.id, '!!!!');
       });
       const { text } = values.body;
       const newMessage = {
@@ -75,11 +79,6 @@ const Home = () => {
       };
       socket.emit('newMessage', newMessage, (response) => {
         console.log(response.status);
-      });
-      socket.on('newMessage', (newMessageFromServer) => {
-        console.log(newMessageFromServer);
-        console.log(chat.messages);
-        dispatch(addMessage(newMessageFromServer));
       });
     },
   });
