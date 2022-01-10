@@ -28,7 +28,7 @@ export const chatSlice = createSlice({
 });
 
 export const {
-  loadState, addMessage, switchCurrentChannel, resetMessages,
+  loadState, switchCurrentChannel, resetMessages,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

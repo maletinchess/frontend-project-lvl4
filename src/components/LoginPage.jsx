@@ -59,7 +59,6 @@ const LoginPage = () => {
         console.log(res.data);
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
-        console.log(localStorage);
         navigate('/');
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {

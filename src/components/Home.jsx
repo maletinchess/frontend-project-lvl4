@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
 import {
   Container, Row, Col, Form, Button, Nav, ButtonGroup,
 } from 'react-bootstrap';
@@ -8,9 +9,20 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import routes from '../routes.js';
+import MessagesBox from './MessagesBox.jsx';
+import Channels from './Channels.jsx';
 import {
-  loadState, addMessage, switchCurrentChannel, resetMessages,
+  loadState,
 } from '../slices/chatSlice.js';
+
+import {
+  addMessage, loadMessages,
+} from '../slices/messageSlice';
+
+import {
+  loadChannels,
+} from '../slices/channelSlice';
+import authContext from '../contexts/index.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -22,9 +34,9 @@ const getAuthHeader = () => {
   return {};
 };
 
+const socket = io();
+
 const Home = () => {
-  const socket = io();
-  const chat = useSelector((state) => state.chat.chat);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -39,29 +51,29 @@ const Home = () => {
     const fetchContent = async () => {
       const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
       dispatch(loadState(data));
+      dispatch(loadChannels(data.channels));
+      dispatch(loadMessages(data.messages));
     };
+
+    const receiveNewMessageSocket = () => {
+      socket.on('newMessage', (newMessageFromServer, acknowledge = _.noop) => {
+        dispatch(addMessage(newMessageFromServer));
+        acknowledge({ status: 'ok!' });
+      });
+    };
+
+    receiveNewMessageSocket();
 
     fetchContent();
 
-    socket.on('newMessage', (newMessageFromServer) => {
-      console.log(newMessageFromServer);
-      dispatch(addMessage(newMessageFromServer));
-    });
+    console.log(socket.listeners('newMessage'));
   }, []);
 
-  const { channels, currentChannelId } = chat;
-
   const handleResetMessages = () => {
-    socket.on('connect', () => {
-      console.log(socket.id);
-    });
     socket.emit('reset');
   };
 
-  const handleSwitchChannel = (id) => {
-    dispatch(switchCurrentChannel(id));
-    console.log(currentChannelId);
-  };
+  const currentChannelId = useSelector((state) => state.chat.chat.currentChannelId);
 
   const formik = useFormik({
     initialValues: {
@@ -70,9 +82,6 @@ const Home = () => {
       },
     },
     onSubmit: (values) => {
-      socket.on('connect', () => {
-        console.log(socket.id, '!!!!');
-      });
       const { text } = values.body;
       const newMessage = {
         text, channelId: currentChannelId,
@@ -82,64 +91,6 @@ const Home = () => {
       });
     },
   });
-
-  const Channels = () => {
-    if (!channels) {
-      return null;
-    }
-
-    return (
-      <Nav variant="pils" className="flex-column">
-        {channels.map((ch) => (
-          <Nav.Item key={ch.id} className="w-100">
-            <Button
-              variant={ch.id === currentChannelId ? 'secondary' : ''}
-              size="sm"
-              active={ch.id === currentChannelId}
-              onClick={() => handleSwitchChannel(ch.id)}
-            >
-              <span className="m-1">#</span>
-              {ch.name}
-            </Button>
-          </Nav.Item> // change classes
-        ))}
-      </Nav>
-    );
-  };
-
-  const CurrentChannel = () => {
-    if (!channels) {
-      return null;
-    }
-    const currentChannelName = channels.find((ch) => ch.id === currentChannelId).name;
-    return currentChannelName && <p>{currentChannelName}</p>;
-  };
-
-  const MessagesBox = () => {
-    const messages = useSelector((state) => state.chat.chat.messages);
-    if (!messages) {
-      return null;
-    }
-
-    const messageElems = messages
-      .filter((item) => item.channelId === currentChannelId)
-      .map((item) => (
-        <li
-          className="list-group-item d-flex"
-          key={item.id}
-        >
-          <span className="mr-auto">{item.text}</span>
-        </li>
-      ));
-
-    return (
-      <div className="mt-3">
-        <ul className="list-group">
-          {messageElems}
-        </ul>
-      </div>
-    );
-  };
 
   return (
     <div className="d-flex flex-column h-100">
@@ -152,7 +103,6 @@ const Home = () => {
           <Col className="p-0 h-100">
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
-                <CurrentChannel />
                 <MessagesBox />
                 <Button onClick={handleResetMessages}>Reset all msg</Button>
               </div>
