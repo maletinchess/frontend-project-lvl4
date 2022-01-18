@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Route,
@@ -7,14 +8,25 @@ import {
 } from 'react-router-dom';
 import { Button, Navbar } from 'react-bootstrap';
 import authContext from '../contexts/index.jsx';
-import useAuth from '../hooks/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import Home from './Home.jsx';
+import {
+  hideModal,
+} from '../slices/modalSlice.js';
+import getModal from './modals/index.js';
+
+const renderModal = ({ modalInfo, hide }) => {
+  if (!modalInfo.type) {
+    return null;
+  }
+
+  const Component = getModal(modalInfo.type);
+  return <Component onHide={hide} modalInfo={modalInfo} />;
+};
 
 const AuthProvider = ({ children }) => {
   const userId = JSON.parse(localStorage.getItem('userId'));
   const authPredicate = !userId;
-  console.log(!authPredicate);
   const [loggedIn, setLoggedIn] = useState(!authPredicate);
 
   const logIn = () => setLoggedIn(true);
@@ -44,24 +56,21 @@ const AuthButton = () => {
   );
 };
 
-const AuthRouter = () => {
-  const auth = useAuth();
-  const authPath = auth.loggedIn ? '/' : '/login';
-  const redirectElem = auth.loggedIn ? <Home /> : <LoginPage />;
-  return (
-    <Route path={authPath} element={redirectElem} />
-  );
-};
-
 const App = () => {
-  const auth = useAuth();
-  console.log(auth);
+  const dispatch = useDispatch();
+  const modalInfo = useSelector((state) => state.modals.modalInfo);
+
+  const handleOnHide = () => {
+    dispatch(hideModal());
+  };
+
   return (
     <AuthProvider>
       <Router>
         <Navbar bg="light" expand="lg">
           <AuthButton />
         </Navbar>
+        {renderModal({ modalInfo, hide: handleOnHide })}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />

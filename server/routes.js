@@ -55,7 +55,7 @@ export default (app, defaultState = {}) => {
         id: getNextId(),
       };
       state.messages.push(messageWithId);
-      acknowledge({ status: 'ok' });
+      acknowledge({ status: 'ok', data: messageWithId });
       app.io.emit('newMessage', messageWithId);
     });
 
@@ -73,11 +73,12 @@ export default (app, defaultState = {}) => {
 
     socket.on('removeChannel', ({ id }, acknowledge = _.noop) => {
       const channelId = Number(id);
+      console.log(id, '!!!!!!!!!!!!!!!!!');
       state.channels = state.channels.filter((c) => c.id !== channelId);
       state.messages = state.messages.filter((m) => m.channelId !== channelId);
       const data = { id: channelId };
 
-      acknowledge({ status: 'ok' });
+      acknowledge({ status: 'ok', data });
       app.io.emit('removeChannel', data);
     });
 

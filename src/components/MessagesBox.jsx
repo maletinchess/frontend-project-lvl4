@@ -2,23 +2,17 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { io } from 'socket.io-client';
-
 import { Nav } from 'react-bootstrap';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
 
 const MessagesBox = () => {
   const { messages } = useSelector((state) => state.messages);
-  const currentChannelId = useSelector((state) => state.chat.chat.currentChannelId);
-
-  if (!messages) {
-    return null;
-  }
+  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
 
   return (
     <div className="mt-3">
       <MessageBoxHeader />
-      <Nav variant="pils" className="flex-column">
+      <Nav variant="pils" className="flex-column" data-bs-spy="scroll">
         {messages
           .filter((item) => item.channelId === currentChannelId)
           .map((item) => (
