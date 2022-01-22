@@ -17,6 +17,10 @@ export const modalSlice = createSlice({
       state.modalInfo.type = 'removing';
       state.modalInfo.item = { id: payload };
     },
+    renameModal: (state, { payload }) => {
+      state.modalInfo.type = 'renaming';
+      state.modalInfo.item = payload;
+    },
     hideModal: (state) => {
       state.modalInfo.type = null;
       state.modalInfo.item = null;
@@ -24,6 +28,8 @@ export const modalSlice = createSlice({
   },
 });
 
-export const { addModal, hideModal, removeModal } = modalSlice.actions;
+export const {
+  addModal, hideModal, removeModal, renameModal,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;

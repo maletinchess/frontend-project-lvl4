@@ -66,17 +66,19 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <Router>
-        <Navbar bg="light" expand="lg">
-          <AuthButton />
-        </Navbar>
-        {renderModal({ modalInfo, hide: handleOnHide })}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<NoMatch />} />
-        </Routes>
-      </Router>
+      <div className="d-flex flex-column h-100">
+        <Router>
+          <Navbar bg="light" expand="lg">
+            <AuthButton />
+          </Navbar>
+          {renderModal({ modalInfo, hide: handleOnHide })}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<NoMatch />} />
+          </Routes>
+        </Router>
+      </div>
     </AuthProvider>
   );
 };

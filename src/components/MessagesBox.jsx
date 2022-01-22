@@ -2,28 +2,26 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { Nav } from 'react-bootstrap';
-import MessageBoxHeader from './MessageBoxHeader.jsx';
-
 const MessagesBox = () => {
   const { messages } = useSelector((state) => state.messages);
+  console.log(messages);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
-
   return (
-    <div className="mt-3">
-      <MessageBoxHeader />
-      <Nav variant="pils" className="flex-column" data-bs-spy="scroll">
-        {messages
-          .filter((item) => item.channelId === currentChannelId)
-          .map((item) => (
-            <Nav.Item
-              fill="true"
-              key={item.id}
-            >
-              <span className="mr-auto">{item.text}</span>
-            </Nav.Item>
-          ))}
-      </Nav>
+    <div className="chat-messages overflow-auto h-100 px-5">
+      {messages
+        .filter((item) => item.channelId === currentChannelId)
+        .map((item) => (
+          <div
+            className="text-break mb-2"
+            key={item.id}
+          >
+            <span className="mr-auto">
+              <b>{item.username}</b>
+              {': '}
+              {item.text}
+            </span>
+          </div>
+        ))}
     </div>
   );
 };

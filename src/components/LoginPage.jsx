@@ -56,8 +56,9 @@ const LoginPage = () => {
       const userNameError = validateUserName(values.body.username);
       try {
         const res = await axios.post(routes.loginPath(), values.body);
-        console.log(res.data);
+        console.log(res.data); // add to localstore or state as username
         localStorage.setItem('userId', JSON.stringify(res.data));
+        localStorage.setItem('username', res.data.username);
         auth.logIn();
         navigate('/');
       } catch (err) {

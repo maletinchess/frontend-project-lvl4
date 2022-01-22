@@ -17,7 +17,7 @@ const MessageBoxHeader = () => {
   const header = `# ${currentChannelData.name}`;
   const messageCountText = `${messagesCount} messages`;
   return header && (
-    <div>
+    <div className="bg-light mb-4 p-3 shadow-sm small">
       <h4><b>{header}</b></h4>
       <span>{messageCountText}</span>
     </div>

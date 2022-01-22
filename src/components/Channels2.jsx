@@ -2,22 +2,32 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-  Nav, DropdownButton, Dropdown, Button, ButtonGroup,
+  Nav, Dropdown, Button, ButtonGroup,
 } from 'react-bootstrap';
 import {
   setCurrentChannelId,
 } from '../slices/channelSlice.js';
 
 import {
-  addModal, removeModal,
+  addModal, removeModal, renameModal,
 } from '../slices/modalSlice.js';
 
 const renderChannel = (channel, switchChannel, currentChannelId) => {
-  const UserDropButton = () => {
-    if (!channel.removable) {
-      return null;
-    }
+  const NotRemovableChannel = () => (
+    <Nav.Item as="li" className="w-100">
+      <Button
+        onClick={() => switchChannel(channel.id)}
+        active={channel.id === currentChannelId}
+        variant={channel.id === currentChannelId ? 'secondary' : ''}
+        className="w-100 rounded-0 text-start"
+      >
+        <span className="me-1">#</span>
+        {channel.name}
+      </Button>
+    </Nav.Item>
+  );
 
+  const SplitDropDown = () => {
     const { id } = channel;
 
     const dispatch = useDispatch();
@@ -26,39 +36,66 @@ const renderChannel = (channel, switchChannel, currentChannelId) => {
       dispatch(removeModal(id));
     };
 
+    const handleShowRename = () => {
+      dispatch(renameModal({ id, body: channel.name }));
+    };
+
     return (
-      <DropdownButton
-        id="dropdown-basic-button"
-        title=""
-        className="flex-grow-0"
-        variant="secondary"
-      >
-        <Dropdown.Item>Rename</Dropdown.Item>
-        <Dropdown.Item onClick={handleShowRemove}>Remove</Dropdown.Item>
-      </DropdownButton>
+      <Dropdown as={ButtonGroup} className="d-flex">
+        <Button
+          onClick={() => switchChannel(channel.id)}
+          active={channel.id === currentChannelId}
+          variant={channel.id === currentChannelId ? 'secondary' : ''}
+          className="w-100 rounded-0 text-start text-truncate"
+        >
+          <span className="me-1">#</span>
+          {channel.name}
+        </Button>
+
+        <Dropdown.Toggle
+          split
+          variant={channel.id === currentChannelId ? 'secondary' : ''}
+          className="flex-grow-0"
+          id="dropdown-split-basic"
+        />
+
+        <Dropdown.Menu>
+          <Dropdown.Item href="#" onClick={handleShowRename}>Rename</Dropdown.Item>
+          <Dropdown.Item href="#" onClick={handleShowRemove}>Remove</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     );
   };
 
-  return (
-    <Nav.Item key={channel.id} className="d-flex">
-      <Button
-        onClick={() => switchChannel(channel.id)}
-        size="sm"
-        active={channel.id === currentChannelId}
-        variant={channel.id === currentChannelId ? 'secondary' : ''}
-        className="w-100"
-      >
-        <span>#</span>
-        <span>{channel.name}</span>
-      </Button>
-      <UserDropButton />
+  const RemovableChannel = () => (
+    <Nav.Item as="li" className="w-100">
+      <SplitDropDown />
     </Nav.Item>
+  );
+
+  return channel.removable
+    ? <RemovableChannel key={channel.id} />
+    : <NotRemovableChannel key={channel.id} />;
+};
+
+export const ChannelsHeader = () => {
+  const dispatch = useDispatch();
+  const handleShowAddModal = () => {
+    dispatch(addModal());
+  };
+
+  return (
+    <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
+      <span>Channels</span>
+      <Button className="p-0 text-primary btn-group-vertical" variant="light" onClick={handleShowAddModal}>+</Button>
+    </div>
   );
 };
 
 const Channels = () => {
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channels.channels);
+  console.log(channels);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
 
   if (!channels) {
@@ -69,20 +106,8 @@ const Channels = () => {
     dispatch(setCurrentChannelId(id));
   };
 
-  const handleShowAddModal = () => {
-    dispatch(addModal());
-  };
-
-  const AddButton = () => (
-    <ButtonGroup className="d-flex mb-2 ps-4 pe-2 justify-content-between">
-      <span>channels</span>
-      <Button className="p-0" variant="light" onClick={handleShowAddModal}>+</Button>
-    </ButtonGroup>
-  );
-
   return (
-    <Nav variant="pils" className="flex-column px-2">
-      <AddButton />
+    <Nav as="ul" variant="pils" className="flex-column px-2 nav-fill">
       {channels.map((ch) => renderChannel(ch, handleSwitchChannel, currentChannelId))}
     </Nav>
   );

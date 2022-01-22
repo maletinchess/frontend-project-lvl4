@@ -5,31 +5,30 @@ import {
   Modal, FormGroup, FormControl,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
-import { addChannel } from '../../slices/channelSlice.js';
+import { renameChannel } from '../../slices/channelSlice.js';
 
-const Add = (props) => {
+const Rename = (props) => {
   const socket = io();
-  const { onHide } = props;
+  const { onHide, modalInfo } = props;
 
   const dispatch = useDispatch();
 
   const f = useFormik({
+    initialValues: {
+      body: modalInfo.item.body,
+    },
     onSubmit: (values) => {
-      const { body } = values;
-      socket.emit('newChannel', { name: body }, (response) => {
-        dispatch(addChannel(response.data));
+      socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
+        dispatch(renameChannel(response.data));
       });
       onHide();
-    },
-    initialValues: {
-      body: '',
     },
   });
 
   return (
     <Modal.Dialog>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Add channel</Modal.Title>
+        <Modal.Title>Rename channel</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={f.handleSubmit}>
@@ -50,4 +49,4 @@ const Add = (props) => {
   );
 };
 
-export default Add;
+export default Rename;

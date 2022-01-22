@@ -73,7 +73,6 @@ export default (app, defaultState = {}) => {
 
     socket.on('removeChannel', ({ id }, acknowledge = _.noop) => {
       const channelId = Number(id);
-      console.log(id, '!!!!!!!!!!!!!!!!!');
       state.channels = state.channels.filter((c) => c.id !== channelId);
       state.messages = state.messages.filter((m) => m.channelId !== channelId);
       const data = { id: channelId };
@@ -88,7 +87,7 @@ export default (app, defaultState = {}) => {
       if (!channel) return;
       channel.name = name;
 
-      acknowledge({ status: 'ok' });
+      acknowledge({ status: 'ok', data: channel });
       app.io.emit('renameChannel', channel);
     });
   });

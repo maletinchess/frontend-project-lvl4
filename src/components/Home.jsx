@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
-import Channels from './Channels2.jsx';
+import MessageBoxHeader from './MessageBoxHeader.jsx';
+import Channels, { ChannelsHeader } from './Channels2.jsx';
 
 import {
   addMessage, loadMessages,
@@ -51,6 +52,10 @@ const Home = () => {
     };
 
     fetchContent();
+
+    socket.io.on('error', (error) => {
+      console.log(error);
+    });
   }, []);
 
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
@@ -61,10 +66,12 @@ const Home = () => {
       },
     },
     onSubmit: (values) => {
+      const username = localStorage.getItem('username');
       const { text } = values.body;
       const newMessage = {
-        text, channelId: currentChannelId,
+        text, channelId: currentChannelId, username,
       };
+      console.log(newMessage);
       socket.emit('newMessage', newMessage, (response) => {
         dispatch(addMessage(response.data));
       });
@@ -72,40 +79,38 @@ const Home = () => {
   });
 
   return (
-    <div className="d-flex flex-column h-100">
-      <Container className="h-100 my-4 overflow-hidden shadow rounded d-flex flex-column">
-        <Row className="flex-md-row h-100">
-          <Col md={4} className="bg-light border-end pt-0 px-5">
-            <Channels />
-          </Col>
-          <Col className="p-0 h-100">
-            <div className="d-flex flex-column h-100">
-              <div className="bg-light mb-4 p-3 shadow-sm small">
-                <MessagesBox />
-              </div>
-              <div className="mt-auto px-5 py-3 flex">
-                <Form className="py-1 border-0 rounded-2 flex" onSubmit={formik.handleSubmit}>
-                  <Form.Group>
-                    <Form.Label />
-                    <Form.Control
-                      onChange={formik.handleChange}
-                      value={formik.values.body.text}
-                      placeholder="message text"
-                      name="body.text"
-                      id="message"
-                      required
-                    />
-                  </Form.Group>
-                  <ButtonGroup>
-                    <Button type="submit" variant="outline-secondary">Submit</Button>
-                  </ButtonGroup>
-                </Form>
-              </div>
+    <Container className="h-100 my-4 overflow-hidden shadow rounded">
+      <Row className="flex-md-row h-100 bg-white">
+        <Col md={4} className="bg-light border-end pt-0 px-5">
+          <ChannelsHeader />
+          <Channels />
+        </Col>
+        <Col className="p-0 h-100">
+          <div className="d-flex flex-column h-100">
+            <MessageBoxHeader />
+            <MessagesBox />
+            <div className="mt-auto px-5 py-3">
+              <Form className="py-1 border-rounded-2" onSubmit={formik.handleSubmit}>
+                <Form.Group>
+                  <Form.Label />
+                  <Form.Control
+                    onChange={formik.handleChange}
+                    value={formik.values.body.text}
+                    placeholder="message text"
+                    name="body.text"
+                    id="message"
+                    required
+                  />
+                </Form.Group>
+                <ButtonGroup>
+                  <Button type="submit" variant="outline-secondary">Submit</Button>
+                </ButtonGroup>
+              </Form>
             </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
