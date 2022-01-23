@@ -17,6 +17,7 @@ import {
 } from '../slices/messageSlice';
 
 import {
+  addChannel, removeChannel,
   loadChannels, loadChannelIds,
 } from '../slices/channelSlice';
 
@@ -31,6 +32,19 @@ const getAuthHeader = () => {
 };
 
 const socket = io();
+
+const mappedAction = {
+  newChannel: addChannel,
+  newMessage: addMessage,
+  removeChannel,
+};
+
+const generateSocket = (eventType, socketApi, dispatch) => {
+  socketApi.on(eventType, (data) => {
+    const action = mappedAction[eventType];
+    dispatch(action(data));
+  });
+};
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -53,6 +67,12 @@ const Home = () => {
 
     fetchContent();
 
+    generateSocket('newChannel', socket, dispatch);
+
+    generateSocket('newMessage', socket, dispatch);
+
+    generateSocket('removeChannel', socket, dispatch);
+
     socket.io.on('error', (error) => {
       console.log(error);
     });
@@ -71,9 +91,8 @@ const Home = () => {
       const newMessage = {
         text, channelId: currentChannelId, username,
       };
-      console.log(newMessage);
       socket.emit('newMessage', newMessage, (response) => {
-        dispatch(addMessage(response.data));
+        console.log(response.data);
       });
     },
   });

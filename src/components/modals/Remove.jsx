@@ -18,7 +18,7 @@ const Remove = (props) => {
   const onSubmit = (e) => {
     e.preventDefault();
     socket.emit('removeChannel', { id }, (response) => {
-      dispatch(removeChannel(response.data.id));
+      console.log(response);
     });
     onHide();
   };

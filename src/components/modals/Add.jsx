@@ -17,7 +17,7 @@ const Add = (props) => {
     onSubmit: (values) => {
       const { body } = values;
       socket.emit('newChannel', { name: body }, (response) => {
-        dispatch(addChannel(response.data));
+        console.log(response.data);
       });
       onHide();
     },

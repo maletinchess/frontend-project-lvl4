@@ -19,7 +19,7 @@ const Rename = (props) => {
     },
     onSubmit: (values) => {
       socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
-        dispatch(renameChannel(response.data));
+        console.log(response);
       });
       onHide();
     },
