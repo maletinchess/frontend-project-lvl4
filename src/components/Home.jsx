@@ -31,8 +31,6 @@ const getAuthHeader = () => {
   return {};
 };
 
-const socket = io();
-
 const mappedAction = {
   newChannel: addChannel,
   newMessage: addMessage,
@@ -46,9 +44,10 @@ const generateSocket = (eventType, socketApi, dispatch) => {
   });
 };
 
+const socket = io();
+
 const Home = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,15 +66,15 @@ const Home = () => {
 
     fetchContent();
 
+    socket.off();
+
     generateSocket('newChannel', socket, dispatch);
 
     generateSocket('newMessage', socket, dispatch);
 
     generateSocket('removeChannel', socket, dispatch);
 
-    socket.io.on('error', (error) => {
-      console.log(error);
-    });
+    console.log(socket.listeners('newMessage'));
   }, []);
 
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
@@ -93,6 +92,7 @@ const Home = () => {
       };
       socket.emit('newMessage', newMessage, (response) => {
         console.log(response.data);
+        console.log(socket.listener('newMessage'));
       });
     },
   });
