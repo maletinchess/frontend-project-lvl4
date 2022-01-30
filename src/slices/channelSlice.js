@@ -16,6 +16,7 @@ const initialState = {
   channels: [],
   currentChannelId: null,
   defaultChannelId: null,
+  loading: 'idle',
 };
 
 export const channelSlice = createSlice({
@@ -44,6 +45,9 @@ export const channelSlice = createSlice({
     setCurrentChannelId: (state, { payload }) => {
       state.currentChannelId = payload;
     },
+    setChannelLoadingState: (state, { payload }) => {
+      state.loading = payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -55,7 +59,8 @@ export const channelSlice = createSlice({
 });
 
 export const {
-  addChannel, loadChannels, removeChannel, renameChannel, loadChannelIds, setCurrentChannelId,
+  addChannel, loadChannels, removeChannel, renameChannel, loadChannelIds,
+  setCurrentChannelId, setChannelLoadingState,
 } = channelSlice.actions;
 
 export default channelSlice.reducer;

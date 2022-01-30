@@ -6,7 +6,7 @@ import {
   Modal, FormGroup,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
-import { removeChannel } from '../../slices/channelSlice.js';
+import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Remove = (props) => {
   const { modalInfo, onHide } = props;
@@ -17,8 +17,13 @@ const Remove = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(setChannelLoadingState('loading'));
     socket.emit('removeChannel', { id }, (response) => {
-      console.log(response);
+      if (response.status !== 'ok') {
+        dispatch(setChannelLoadingState('failed'));
+      } else {
+        dispatch(setChannelLoadingState('finished'));
+      }
     });
     onHide();
   };

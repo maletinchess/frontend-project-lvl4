@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import {
-  Container, Row, Col, Form, Button, ButtonGroup,
+  Container, Row, Col, Spinner,
 } from 'react-bootstrap';
 import axios from 'axios';
-import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
+import MessageForm from './MessageForm.jsx';
 import Channels, { ChannelsHeader } from './Channels2.jsx';
 
 import {
@@ -38,10 +38,14 @@ const mappedAction = {
 };
 
 const generateSocket = (eventType, socketApi, dispatch) => {
-  socketApi.on(eventType, (data) => {
-    const action = mappedAction[eventType];
-    dispatch(action(data));
-  });
+  try {
+    socketApi.on(eventType, (data) => {
+      const action = mappedAction[eventType];
+      dispatch(action(data));
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const socket = io();
@@ -73,29 +77,21 @@ const Home = () => {
     generateSocket('newMessage', socket, dispatch);
 
     generateSocket('removeChannel', socket, dispatch);
-
-    console.log(socket.listeners('newMessage'));
   }, []);
 
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
-  const formik = useFormik({
-    initialValues: {
-      body: {
-        text: '',
-      },
-    },
-    onSubmit: (values) => {
-      const username = localStorage.getItem('username');
-      const { text } = values.body;
-      const newMessage = {
-        text, channelId: currentChannelId, username,
-      };
-      socket.emit('newMessage', newMessage, (response) => {
-        console.log(response.data);
-        console.log(socket.listener('newMessage'));
-      });
-    },
-  });
+  const channelLoadingState = useSelector((state) => state.channels.loading);
+  const messageLoadingState = useSelector((state) => state.messages.loading);
+  console.log('channelsstae: ', channelLoadingState);
+  console.log('messagesstate: ', messageLoadingState);
+
+  const UserSpinner = () => {
+    if (channelLoadingState !== 'loading' && messageLoadingState !== 'loading') {
+      return null;
+    }
+    return (
+      <Spinner animation="border" variant="primary" />
+    );
+  };
 
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">
@@ -105,27 +101,11 @@ const Home = () => {
           <Channels />
         </Col>
         <Col className="p-0 h-100">
+          <UserSpinner />
           <div className="d-flex flex-column h-100">
             <MessageBoxHeader />
             <MessagesBox />
-            <div className="mt-auto px-5 py-3">
-              <Form className="py-1 border-rounded-2" onSubmit={formik.handleSubmit}>
-                <Form.Group>
-                  <Form.Label />
-                  <Form.Control
-                    onChange={formik.handleChange}
-                    value={formik.values.body.text}
-                    placeholder="message text"
-                    name="body.text"
-                    id="message"
-                    required
-                  />
-                </Form.Group>
-                <ButtonGroup>
-                  <Button type="submit" variant="outline-secondary">Submit</Button>
-                </ButtonGroup>
-              </Form>
-            </div>
+            <MessageForm />
           </div>
         </Col>
       </Row>

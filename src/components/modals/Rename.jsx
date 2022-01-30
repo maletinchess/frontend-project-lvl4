@@ -5,7 +5,7 @@ import {
   Modal, FormGroup, FormControl,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
-import { renameChannel } from '../../slices/channelSlice.js';
+import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Rename = (props) => {
   const socket = io();
@@ -18,8 +18,14 @@ const Rename = (props) => {
       body: modalInfo.item.body,
     },
     onSubmit: (values) => {
+      dispatch(setChannelLoadingState('loading'));
       socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
         console.log(response);
+        if (response.status !== 'ok') {
+          dispatch(setChannelLoadingState('failed'));
+        } else {
+          dispatch(setChannelLoadingState('finished'));
+        }
       });
       onHide();
     },
@@ -42,7 +48,7 @@ const Rename = (props) => {
               name="body"
             />
           </FormGroup>
-          <input type="submit" className="btn btn-primary" value="submit" />
+          <input type="submit" className="btn btn-primary" value="Rename" />
         </form>
       </Modal.Body>
     </Modal.Dialog>
