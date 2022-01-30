@@ -17,7 +17,7 @@ import {
 } from '../slices/messageSlice';
 
 import {
-  addChannel, removeChannel,
+  addChannel, removeChannel, renameChannel,
   loadChannels, loadChannelIds,
 } from '../slices/channelSlice';
 
@@ -35,6 +35,7 @@ const mappedAction = {
   newChannel: addChannel,
   newMessage: addMessage,
   removeChannel,
+  renameChannel,
 };
 
 const generateSocket = (eventType, socketApi, dispatch) => {
@@ -77,6 +78,8 @@ const Home = () => {
     generateSocket('newMessage', socket, dispatch);
 
     generateSocket('removeChannel', socket, dispatch);
+
+    generateSocket('renameChannel', socket, dispatch);
   }, []);
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
