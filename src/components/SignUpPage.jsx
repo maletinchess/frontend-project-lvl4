@@ -3,38 +3,19 @@ import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
-const LoginPage = () => {
-  const [authFailed, setAuthFailed] = useState(false);
-
-  const auth = useAuth();
-
-  const navigate = useNavigate();
-
+const SignUpPage = () => {
   const f = useFormik({
     initialValues: {
-      body: {
-        username: '',
-        password: '',
-      },
+      password: '',
+      login: '',
+      passwordConfirm: '',
     },
-    onSubmit: async (values) => {
-      try {
-        const res = await axios.post(routes.loginPath(), values.body);
-        console.log(res.data); // add to localstore or state as username
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        localStorage.setItem('username', res.data.username);
-        auth.logIn();
-        navigate('/');
-      } catch (err) {
-        if (err.isAxiosError && err.response.status === 401) {
-          setAuthFailed(true);
-          return;
-        }
-        throw err;
-      }
+    onSubmit: (values) => {
+      console.log(values);
     },
   });
   return (
@@ -46,12 +27,11 @@ const LoginPage = () => {
               <Form.Label htmlFor="username">Username</Form.Label>
               <Form.Control
                 onChange={f.handleChange}
-                value={f.values.body.username}
+                value={f.values.login}
                 placeholder="username"
-                name="body.username"
-                isInvalid={authFailed}
-                id="username"
-                autoComplete="username"
+                name="login"
+                id="login"
+                autoComplete="login"
                 required
               />
             </Form.Group>
@@ -60,17 +40,30 @@ const LoginPage = () => {
               <Form.Control
                 type="password"
                 onChange={f.handleChange}
-                value={f.values.body.password}
+                value={f.values.password}
                 placeholder="password"
-                name="body.password"
-                isInvalid={authFailed}
+                name="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="password"
                 required
               />
               <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit" variant="outline-primary">Submit</Button>
+            <Form.Group>
+              <Form.Label htmlFor="password">Confirm password</Form.Label>
+              <Form.Control
+                type="password"
+                onChange={f.handleChange}
+                value={f.values.passwordConfirm}
+                placeholder="confirm-password"
+                name="passwordConfirmation"
+                id="passwordConfirmation"
+                autoComplete="confirm-password"
+                required
+              />
+              <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>
+            </Form.Group>
+            <Button type="submit" variant="outline-primary">Registrate</Button>
           </Form>
         </div>
       </div>
@@ -78,4 +71,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

@@ -9,6 +9,7 @@ import {
 import { Button, Navbar } from 'react-bootstrap';
 import authContext from '../contexts/index.jsx';
 import LoginPage from './LoginPage.jsx';
+import SignUpPage from './SignUpPage.jsx';
 import Home from './Home.jsx';
 import {
   hideModal,
@@ -70,11 +71,14 @@ const App = () => {
         <Router>
           <Navbar bg="light" expand="lg">
             <AuthButton />
+            <Link to="/signup">Registration</Link>
+            <Link to="/">Hexlet Chat</Link>
           </Navbar>
           {renderModal({ modalInfo, hide: handleOnHide })}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
         </Router>
