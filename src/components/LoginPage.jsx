@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
@@ -38,12 +38,11 @@ const LoginPage = () => {
     },
   });
   return (
-    <div className="container-fluid">
-      <div className="row justify-content-center pt-5">
-        <div className="col-sm-4">
+    <div className="container-fluid h-100">
+      <div className="row justify-content-center align-content-center h-50">
+        <div className="col-12 col-md-8 col-xxl-6">
           <Form className="p-3" onSubmit={f.handleSubmit}>
-            <Form.Group>
-              <Form.Label htmlFor="username">Username</Form.Label>
+            <Form.Group className="m-1">
               <Form.Control
                 onChange={f.handleChange}
                 value={f.values.body.username}
@@ -55,8 +54,7 @@ const LoginPage = () => {
                 required
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Group className="m-1">
               <Form.Control
                 type="password"
                 onChange={f.handleChange}
@@ -70,8 +68,9 @@ const LoginPage = () => {
               />
               <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit" variant="outline-primary">Submit</Button>
+            <Button type="submit" variant="outline-primary" className="m-1">Submit</Button>
           </Form>
+          <Link to="/signup" className="p-2">Registration</Link>
         </div>
       </div>
     </div>

@@ -38,6 +38,7 @@
     "fastify-static": "^4.0.1",
     "formik": "^2.2.9",
     "http-errors": "^1.8.0",
+    "immer": "^9.0.12",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "pino-pretty": "^4.8.0",
@@ -51,6 +52,7 @@
     "react-router-dom": "^6.0.2",
     "regenerator-runtime": "^0.13.7",
     "socket.io-client": "^4.4.0",
+    "use-immer": "^0.6.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

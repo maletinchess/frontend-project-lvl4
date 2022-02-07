@@ -53,7 +53,7 @@ const AuthButton = () => {
   return (
     auth.loggedIn
       ? <Button onClick={auth.logOut} as={Link} to="/login">Log out</Button>
-      : <Button as={Link} to="/login">Log in</Button>
+      : null
   );
 };
 
@@ -71,7 +71,6 @@ const App = () => {
         <Router>
           <Navbar bg="light" expand="lg">
             <AuthButton />
-            <Link to="/signup">Registration</Link>
             <Link to="/">Hexlet Chat</Link>
           </Navbar>
           {renderModal({ modalInfo, hide: handleOnHide })}
