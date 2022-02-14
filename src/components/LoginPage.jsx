@@ -3,11 +3,14 @@ import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
 const LoginPage = () => {
   const [authFailed, setAuthFailed] = useState(false);
+
+  const { t } = useTranslation();
 
   const auth = useAuth();
 
@@ -41,12 +44,13 @@ const LoginPage = () => {
     <div className="container-fluid h-100">
       <div className="row justify-content-center align-content-center h-50">
         <div className="col-12 col-md-8 col-xxl-6">
+          <h1 className="text-center">{t('login.header')}</h1>
           <Form className="p-3" onSubmit={f.handleSubmit}>
             <Form.Group className="m-1">
               <Form.Control
                 onChange={f.handleChange}
                 value={f.values.body.username}
-                placeholder="username"
+                placeholder={t('login.placeholder.username')}
                 name="body.username"
                 isInvalid={authFailed}
                 id="username"
@@ -59,7 +63,7 @@ const LoginPage = () => {
                 type="password"
                 onChange={f.handleChange}
                 value={f.values.body.password}
-                placeholder="password"
+                placeholder={t('login.placeholder.password')}
                 name="body.password"
                 isInvalid={authFailed}
                 id="password"
@@ -68,9 +72,9 @@ const LoginPage = () => {
               />
               <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit" variant="outline-primary" className="m-1">Submit</Button>
+            <Button type="submit" variant="outline-primary" className="m-1">{t('login.submitButton')}</Button>
           </Form>
-          <Link to="/signup" className="p-2">Registration</Link>
+          <Link to="/signup" className="p-2">{t('registration.header')}</Link>
         </div>
       </div>
     </div>

@@ -6,12 +6,15 @@ import {
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 import { setMessageLoadingState } from '../slices/messageSlice.js';
 
 const socket = io();
+const send = '->';
 
 const MessageForm = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const messageLoadingState = useSelector((state) => state.messages.loading);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
 
@@ -46,7 +49,7 @@ const MessageForm = () => {
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.body.text}
-            placeholder="message text"
+            placeholder={t('messages.inputPlaceholder')}
             name="body.text"
             id="message"
             required
@@ -60,7 +63,7 @@ const MessageForm = () => {
             variant="outline-secondary"
             disabled={messageLoadingState === 'loading'}
           >
-            send
+            {send}
           </Button>
         </ButtonGroup>
       </Form>

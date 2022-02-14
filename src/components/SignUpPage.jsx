@@ -8,6 +8,7 @@ import axios from 'axios';
 import { string } from 'yup';
 import _ from 'lodash';
 import { useImmer } from 'use-immer';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
@@ -55,6 +56,8 @@ const SignUpPage = () => {
   });
 
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const auth = useAuth();
 
@@ -155,12 +158,12 @@ const SignUpPage = () => {
       <div className="row justify-content-center align-content-center h-100">
         <div className="col-12 col-md-8 col-xxl-6">
           <Form className="p-3" onSubmit={f.handleSubmit}>
-            <h1>Registration</h1>
+            <h1>{t('registration.header')}</h1>
             <Form.Group className="m-1">
               <Form.Control
                 onChange={f.handleChange}
                 value={f.values.login}
-                placeholder="username"
+                placeholder={t('registration.placeholder.username')}
                 name="body.username"
                 id="username"
                 autoComplete="username"
@@ -174,7 +177,7 @@ const SignUpPage = () => {
                 type="password"
                 onChange={f.handleChange}
                 value={f.values.password}
-                placeholder="password"
+                placeholder={t('registration.placeholder.password')}
                 name="body.password"
                 id="password"
                 autoComplete="password"
@@ -188,7 +191,7 @@ const SignUpPage = () => {
                 type="password"
                 onChange={f.handleChange}
                 value={f.values.passwordConfirm}
-                placeholder="confirm-password"
+                placeholder={t('registration.placeholder.passwordConfirm')}
                 name="body.passwordConfirm"
                 id="passwordConfirm"
                 autoComplete="confirm-password"
@@ -198,7 +201,7 @@ const SignUpPage = () => {
               <Form.Control.Feedback type="invalid">{formErrors.confirmError}</Form.Control.Feedback>
             </Form.Group>
             <ResponseFeedback errorMessage={formErrors.serverError} />
-            <Button type="submit" variant="outline-primary" className="m-1">Registrate</Button>
+            <Button type="submit" variant="outline-primary" className="m-1">{t('registration.submitButton')}</Button>
           </Form>
         </div>
       </div>

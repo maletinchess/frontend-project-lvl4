@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { useTranslation } from 'react-i18next';
+
 import {
   Nav, Dropdown, Button, ButtonGroup,
 } from 'react-bootstrap';
@@ -12,7 +14,7 @@ import {
   addModal, removeModal, renameModal,
 } from '../slices/modalSlice.js';
 
-const renderChannel = (channel, switchChannel, currentChannelId) => {
+const renderChannel = (channel, switchChannel, currentChannelId, t) => {
   const NotRemovableChannel = () => (
     <Nav.Item as="li" className="w-100">
       <Button
@@ -60,8 +62,8 @@ const renderChannel = (channel, switchChannel, currentChannelId) => {
         />
 
         <Dropdown.Menu>
-          <Dropdown.Item href="#" onClick={handleShowRename}>Rename</Dropdown.Item>
-          <Dropdown.Item href="#" onClick={handleShowRemove}>Remove</Dropdown.Item>
+          <Dropdown.Item href="#" onClick={handleShowRename}>{t('channels.addChannel')}</Dropdown.Item>
+          <Dropdown.Item href="#" onClick={handleShowRemove}>{t('channels.removeChannel')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     );
@@ -80,13 +82,14 @@ const renderChannel = (channel, switchChannel, currentChannelId) => {
 
 export const ChannelsHeader = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const handleShowAddModal = () => {
     dispatch(addModal());
   };
 
   return (
     <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-      <span>Channels</span>
+      <span>{t('channels.channelsHeader')}</span>
       <Button className="p-0 text-primary btn-group-vertical" variant="light" onClick={handleShowAddModal}>+</Button>
     </div>
   );
@@ -94,6 +97,7 @@ export const ChannelsHeader = () => {
 
 const Channels = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const channels = useSelector((state) => state.channels.channels);
   console.log(channels);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
@@ -108,7 +112,7 @@ const Channels = () => {
 
   return (
     <Nav as="ul" variant="pils" className="flex-column px-2 nav-fill">
-      {channels.map((ch) => renderChannel(ch, handleSwitchChannel, currentChannelId))}
+      {channels.map((ch) => renderChannel(ch, handleSwitchChannel, currentChannelId, t))}
     </Nav>
   );
 };

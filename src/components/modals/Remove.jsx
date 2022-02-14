@@ -3,9 +3,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
-  Modal, FormGroup,
+  Modal, FormGroup, ButtonGroup, Button,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Remove = (props) => {
@@ -14,6 +15,8 @@ const Remove = (props) => {
   const socket = io();
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -31,14 +34,20 @@ const Remove = (props) => {
   return (
     <Modal.Dialog>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Remove</Modal.Title>
+        <Modal.Title>{t('channels.modals.remove.header')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <form onSubmit={onSubmit}>
           <FormGroup>
-            <input type="submit" className="btn btn-danger" value="remove" />
+            <p>{t('channels.modals.remove.confirm')}</p>
           </FormGroup>
+          <ButtonGroup className="d-flex justify-content-end">
+            <Button className="me-2 btn btn-secondary" onClick={onHide}>
+              {t('channels.modals.add.footer.cancel')}
+            </Button>
+            <input type="submit" className="btn btn-danger" value={t('channels.modals.remove.footer.submit')} />
+          </ButtonGroup>
         </form>
       </Modal.Body>
     </Modal.Dialog>

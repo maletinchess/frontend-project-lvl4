@@ -2,9 +2,10 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import {
-  Modal, FormGroup, FormControl,
+  Modal, FormGroup, FormControl, ButtonGroup, Button,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Rename = (props) => {
@@ -12,6 +13,8 @@ const Rename = (props) => {
   const { onHide, modalInfo } = props;
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const f = useFormik({
     initialValues: {
@@ -34,7 +37,7 @@ const Rename = (props) => {
   return (
     <Modal.Dialog>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Rename channel</Modal.Title>
+        <Modal.Title>{t('channels.modals.rename.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={f.handleSubmit}>
@@ -48,7 +51,12 @@ const Rename = (props) => {
               name="body"
             />
           </FormGroup>
-          <input type="submit" className="btn btn-primary" value="Rename" />
+          <ButtonGroup>
+            <Button className="me-2 btn btn-secondary" onClick={onHide}>
+              {t('channels.modals.rename.footer.cancel')}
+            </Button>
+            <input type="submit" className="btn btn-primary" value={t('channels.modals.rename.footer.submit')} />
+          </ButtonGroup>
         </form>
       </Modal.Body>
     </Modal.Dialog>

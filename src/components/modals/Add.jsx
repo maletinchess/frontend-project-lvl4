@@ -2,8 +2,11 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Modal, FormGroup, FormControl,
+  Modal, FormGroup, FormControl, ButtonGroup, Button,
 } from 'react-bootstrap';
+
+import { useTranslation } from 'react-i18next';
+
 import { io } from 'socket.io-client';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
@@ -13,6 +16,8 @@ const Add = (props) => {
   const { onHide } = props;
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const f = useFormik({
     onSubmit: (values) => {
@@ -36,7 +41,7 @@ const Add = (props) => {
   return (
     <Modal.Dialog>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Add channel</Modal.Title>
+        <Modal.Title>{t('channels.modals.add.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={f.handleSubmit}>
@@ -50,7 +55,12 @@ const Add = (props) => {
               name="body"
             />
           </FormGroup>
-          <input disabled={channelLoadingState === 'loading'} type="submit" className="btn btn-primary" value="submit" />
+          <ButtonGroup className="d-flex justify-content-end">
+            <Button className="me-2 btn btn-secondary" onClick={onHide}>
+              {t('channels.modals.add.footer.cancel')}
+            </Button>
+            <input disabled={channelLoadingState === 'loading'} type="submit" className="btn btn-primary" value={t('channels.modals.add.footer.submit')} />
+          </ButtonGroup>
         </form>
       </Modal.Body>
     </Modal.Dialog>

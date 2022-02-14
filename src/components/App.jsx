@@ -7,6 +7,7 @@ import {
   Link,
 } from 'react-router-dom';
 import { Button, Navbar } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import authContext from '../contexts/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import SignUpPage from './SignUpPage.jsx';
@@ -49,10 +50,11 @@ const NoMatch = () => (
 
 const AuthButton = () => {
   const auth = useContext(authContext);
+  const { t } = useTranslation();
 
   return (
     auth.loggedIn
-      ? <Button onClick={auth.logOut} as={Link} to="/login">Log out</Button>
+      ? <Button onClick={auth.logOut} as={Link} to="/login">{t('logout')}</Button>
       : null
   );
 };
@@ -65,13 +67,15 @@ const App = () => {
     dispatch(hideModal());
   };
 
+  const { t } = useTranslation();
+
   return (
     <AuthProvider>
       <div className="d-flex flex-column h-100">
         <Router>
           <Navbar bg="light" expand="lg">
             <AuthButton />
-            <Link to="/">Hexlet Chat</Link>
+            <Link to="/">{t('header')}</Link>
           </Navbar>
           {renderModal({ modalInfo, hide: handleOnHide })}
           <Routes>
