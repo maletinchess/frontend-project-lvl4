@@ -74,8 +74,8 @@ const App = () => {
       <div className="d-flex flex-column h-100">
         <Router>
           <Navbar bg="light" expand="lg">
-            <AuthButton />
             <Link to="/">{t('header')}</Link>
+            <AuthButton />
           </Navbar>
           {renderModal({ modalInfo, hide: handleOnHide })}
           <Routes>

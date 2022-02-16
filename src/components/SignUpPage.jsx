@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-import { string } from 'yup';
+import { string, setLocale } from 'yup';
 import _ from 'lodash';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,13 @@ import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
 const validateUserName = (username) => {
+  setLocale({
+    string: {
+      min: 'errors.notValidUsernameLength',
+      max: 'errors.notValidUsernameLength',
+      required: 'errors.emptyField',
+    },
+  });
   const schema = string()
     .trim()
     .required()
@@ -27,11 +34,16 @@ const validateUserName = (username) => {
 };
 
 const validatePassword = (password) => {
+  setLocale({
+    string: {
+      min: 'errors.shortPassword',
+      required: 'errors.emptyField',
+    },
+  });
   const schema = string()
     .trim()
     .required()
-    .min(6)
-    .max(20);
+    .min(6);
   try {
     schema.validateSync(password);
     return null;
@@ -41,9 +53,9 @@ const validatePassword = (password) => {
 };
 
 const ResponseFeedback = (props) => {
-  const { errorMessage } = props;
+  const { errorMessage, t } = props;
   return (
-    <div>{errorMessage}</div>
+    <div className="is-invalid text-danger">{t(errorMessage)}</div>
   );
 };
 
@@ -75,13 +87,13 @@ const SignUpPage = () => {
 
   const setConfirmPasswordError = () => {
     setFormErrors((errors) => {
-      errors.confirmError = 'passwords doesn\'t match';
+      errors.confirmError = 'errors.passwordIsNotConfirmed';
     });
   };
 
   const setServerError = () => {
     setFormErrors((errors) => {
-      errors.serverError = 'user already exists';
+      errors.serverError = 'errors.userExist';
     });
   };
 
@@ -170,7 +182,7 @@ const SignUpPage = () => {
                 isInvalid={formErrors.usernameError !== ''}
                 required
               />
-              <Form.Control.Feedback type="invalid">{formErrors.usernameError}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{t(formErrors.usernameError)}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Control
@@ -184,7 +196,7 @@ const SignUpPage = () => {
                 isInvalid={formErrors.passwordError !== ''}
                 required
               />
-              <Form.Control.Feedback type="invalid">{formErrors.passwordError}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{t(formErrors.passwordError)}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Control
@@ -198,9 +210,9 @@ const SignUpPage = () => {
                 isInvalid={formErrors.confirmError !== ''}
                 required
               />
-              <Form.Control.Feedback type="invalid">{formErrors.confirmError}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{t(formErrors.confirmError)}</Form.Control.Feedback>
             </Form.Group>
-            <ResponseFeedback errorMessage={formErrors.serverError} />
+            <ResponseFeedback errorMessage={formErrors.serverError} t={t} />
             <Button type="submit" variant="outline-primary" className="m-1">{t('registration.submitButton')}</Button>
           </Form>
         </div>

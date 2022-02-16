@@ -96,6 +96,16 @@ const Home = () => {
     );
   };
 
+  const ErrorComponent = (props) => {
+    const { error } = props;
+    if (channelLoadingState !== 'failed') {
+      return null;
+    }
+    return (
+      <div>{error}</div>
+    );
+  };
+
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">
       <Row className="flex-md-row h-100 bg-white">

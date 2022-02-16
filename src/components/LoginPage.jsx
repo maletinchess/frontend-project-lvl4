@@ -70,7 +70,7 @@ const LoginPage = () => {
                 autoComplete="current-password"
                 required
               />
-              <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{t('errors.wrongPasswordOrUsername')}</Form.Control.Feedback>
             </Form.Group>
             <Button type="submit" variant="outline-primary" className="m-1">{t('login.submitButton')}</Button>
           </Form>
