@@ -63,7 +63,14 @@ const resources = {
         headerInfo: 'сообщений',
       },
       errors: {
-
+        networkError: 'Ошибка сети',
+        userExist: 'Такой пользователь уже существует',
+        notValidUsernameLength: 'От 3 до 20 символов',
+        shortPassword: 'Не менее 6 символов',
+        passwordIsNotConfirmed: 'Пароли должны совпадать',
+        unknownError: 'неизвестная ошибка',
+        wrongPasswordOrUsername: 'Неверные имя пользователя или пароль',
+        emptyField: 'Обязательное поле',
       },
     },
   },
