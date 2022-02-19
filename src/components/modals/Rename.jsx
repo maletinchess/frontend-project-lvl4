@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import {
   Modal, FormGroup, FormControl, ButtonGroup, Button,
 } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
@@ -26,8 +27,10 @@ const Rename = (props) => {
         console.log(response);
         if (response.status !== 'ok') {
           dispatch(setChannelLoadingState('failed'));
+          toast.error(t('errors.networkError'));
         } else {
           dispatch(setChannelLoadingState('finished'));
+          toast.success(t('toasts.renameChannel'));
         }
       });
       onHide();

@@ -72,6 +72,11 @@ const resources = {
         wrongPasswordOrUsername: 'Неверные имя пользователя или пароль',
         emptyField: 'Обязательное поле',
       },
+      toasts: {
+        addChannel: 'Канал создан',
+        renameChannel: 'Канал переименован',
+        removeChannel: 'Канал удалён',
+      },
     },
   },
 };

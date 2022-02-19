@@ -2,11 +2,14 @@ import React from 'react';
 
 import { useDispatch } from 'react-redux';
 
+import { toast } from 'react-toastify';
+
 import {
   Modal, FormGroup, ButtonGroup, Button,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
+
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Remove = (props) => {
@@ -24,8 +27,10 @@ const Remove = (props) => {
     socket.emit('removeChannel', { id }, (response) => {
       if (response.status !== 'ok') {
         dispatch(setChannelLoadingState('failed'));
+        toast.error(t('errors.networkErrors'));
       } else {
         dispatch(setChannelLoadingState('finished'));
+        toast.success(t('toasts.removeChannel'));
       }
     });
     onHide();

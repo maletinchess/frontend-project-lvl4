@@ -5,6 +5,8 @@ import {
   Modal, FormGroup, FormControl, ButtonGroup, Button,
 } from 'react-bootstrap';
 
+import { toast } from 'react-toastify';
+
 import { useTranslation } from 'react-i18next';
 
 import { io } from 'socket.io-client';
@@ -27,8 +29,10 @@ const Add = (props) => {
         console.log(response.status);
         if (response.status !== 'ok') {
           dispatch(setChannelLoadingState('failed'));
+          toast.error(t('errors.networkError'));
         } else {
           dispatch(setChannelLoadingState('finished'));
+          toast.success(t('toasts.addChannel'));
         }
       });
       onHide();

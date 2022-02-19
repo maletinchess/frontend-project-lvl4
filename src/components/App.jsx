@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React, { useContext, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -8,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { Button, Navbar } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
 import authContext from '../contexts/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import SignUpPage from './SignUpPage.jsx';
@@ -16,6 +18,8 @@ import {
   hideModal,
 } from '../slices/modalSlice.js';
 import getModal from './modals/index.js';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import '!style-loader!css-loader!react-toastify/dist/ReactToastify.css';
 
 const renderModal = ({ modalInfo, hide }) => {
   if (!modalInfo.type) {
@@ -85,6 +89,17 @@ const App = () => {
             <Route path="*" element={<NoMatch />} />
           </Routes>
         </Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </AuthProvider>
   );
