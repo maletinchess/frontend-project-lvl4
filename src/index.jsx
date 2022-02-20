@@ -17,7 +17,7 @@ import '../assets/application.scss';
 // include and initialize the rollbar library with your access token
 var Rollbar = require('rollbar')
 var rollbar = new Rollbar({
-  accessToken: 'e947cee1bf91466b8190466d3655d426',
+  accessToken: '9671e3800fa04d45be0f1b34555b98d6',
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
