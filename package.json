@@ -41,7 +41,9 @@
     "i18next": "^21.6.11",
     "immer": "^9.0.12",
     "jquery": "^3.6.0",
+    "leo-profanity": "^1.5.0",
     "lodash": "^4.17.21",
+    "mini-css-extract-plugin": "^1.6.0",
     "pino-pretty": "^4.8.0",
     "point-of-view": "^4.14.0",
     "popper.js": "^1.16.1",
@@ -56,8 +58,7 @@
     "regenerator-runtime": "^0.13.7",
     "socket.io-client": "^4.4.0",
     "use-immer": "^0.6.0",
-    "yup": "^0.32.11",
-    "mini-css-extract-plugin": "^1.6.0"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",

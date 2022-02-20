@@ -6,6 +6,7 @@ import {
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
+import filter from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { setMessageLoadingState } from '../slices/messageSlice.js';
 
@@ -28,8 +29,10 @@ const MessageForm = () => {
       dispatch(setMessageLoadingState('loading'));
       const username = localStorage.getItem('username');
       const { text } = values.body;
+      const filteredText = filter.clean(text);
+      console.log('check filter: ', text, filteredText);
       const newMessage = {
-        text, channelId: currentChannelId, username,
+        text: filteredText, channelId: currentChannelId, username,
       };
       socket.emit('newMessage', newMessage, (response) => {
         if (response.status !== 'ok') {
