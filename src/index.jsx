@@ -14,6 +14,17 @@ import i18n from './i18n';
 
 import '../assets/application.scss';
 
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar')
+var rollbar = new Rollbar({
+  accessToken: 'e947cee1bf91466b8190466d3655d426',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+})
+
+// record a generic message and send it to Rollbar
+rollbar.log('Hello world!');
+
 ReactDOM.render(
   <I18nextProvider i18n={i18n}>
     <Provider store={store}>
