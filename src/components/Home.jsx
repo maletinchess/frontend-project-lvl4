@@ -46,7 +46,7 @@ const generateSocket = (eventType, socketApi, dispatch) => {
       dispatch(action(data));
     });
   } catch (e) {
-    console.log(e);
+    console.log(`socket-error - ${eventType}`, e);
     Rollbar.error('Something went wrong', e);
   }
 };
