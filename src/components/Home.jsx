@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
+import Rollbar from 'rollbar';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
@@ -46,6 +47,7 @@ const generateSocket = (eventType, socketApi, dispatch) => {
     });
   } catch (e) {
     console.log(e);
+    Rollbar.error('Something went wrong', e);
   }
 };
 
