@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
-import Rollbar from 'rollbar';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
@@ -42,12 +41,15 @@ const mappedAction = {
 const generateSocket = (eventType, socketApi, dispatch) => {
   try {
     socketApi.on(eventType, (data) => {
+      console.log('socket ON');
       const action = mappedAction[eventType];
       dispatch(action(data));
     });
+    socketApi.on('error', (err) => {
+      console.log('!!!!!!!', err);
+    });
   } catch (e) {
     console.log(`socket-error - ${eventType}`, e);
-    Rollbar.error('Something went wrong', e);
   }
 };
 
@@ -86,8 +88,6 @@ const Home = () => {
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
   const messageLoadingState = useSelector((state) => state.messages.loading);
-  console.log('channelsstae: ', channelLoadingState);
-  console.log('messagesstate: ', messageLoadingState);
 
   const UserSpinner = () => {
     if (channelLoadingState !== 'loading' && messageLoadingState !== 'loading') {
@@ -95,16 +95,6 @@ const Home = () => {
     }
     return (
       <Spinner animation="border" variant="primary" />
-    );
-  };
-
-  const ErrorComponent = (props) => {
-    const { error } = props;
-    if (channelLoadingState !== 'failed') {
-      return null;
-    }
-    return (
-      <div>{error}</div>
     );
   };
 

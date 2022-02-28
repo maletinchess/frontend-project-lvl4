@@ -63,11 +63,6 @@ const AuthButton = () => {
   );
 };
 
-const rollbarConfig = {
-  accessToken: '9671e3800fa04d45be0f1b34555b98d6',
-  environment: 'production',
-};
-
 const App = () => {
   const dispatch = useDispatch();
   const modalInfo = useSelector((state) => state.modals.modalInfo);
@@ -79,38 +74,34 @@ const App = () => {
   const { t } = useTranslation();
 
   return (
-    <Provider config={rollbarConfig}>
-      <ErrorBoundary>
-        <AuthProvider>
-          <div className="d-flex flex-column h-100">
-            <Router>
-              <Navbar bg="light" expand="lg">
-                <Link to="/">{t('header')}</Link>
-                <AuthButton />
-              </Navbar>
-              {renderModal({ modalInfo, hide: handleOnHide })}
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="*" element={<NoMatch />} />
-              </Routes>
-            </Router>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </div>
-        </AuthProvider>
-      </ErrorBoundary>
-    </Provider>
+    <AuthProvider>
+      <div className="d-flex flex-column h-100">
+        <Router>
+          <Navbar bg="light" expand="lg">
+            <Link to="/">{t('header')}</Link>
+            <AuthButton />
+          </Navbar>
+          {renderModal({ modalInfo, hide: handleOnHide })}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="*" element={<NoMatch />} />
+          </Routes>
+        </Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </div>
+    </AuthProvider>
   );
 };
 export default App;
