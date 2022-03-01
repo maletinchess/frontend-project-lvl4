@@ -39,18 +39,14 @@ const mappedAction = {
 };
 
 const generateSocket = (eventType, socketApi, dispatch) => {
-  try {
-    socketApi.on(eventType, (data) => {
-      console.log('socket ON');
-      const action = mappedAction[eventType];
-      dispatch(action(data));
-    });
-    socketApi.on('error', (err) => {
-      console.log('!!!!!!!', err);
-    });
-  } catch (e) {
-    console.log(`socket-error - ${eventType}`, e);
-  }
+  socketApi.on(eventType, async (data) => {
+    console.log('socket ON');
+    const action = mappedAction[eventType];
+    await dispatch(action(data));
+  });
+  socketApi.on('connect_error', () => {
+    console.log('SOCKET_ERROR');
+  });
 };
 
 const socket = io();
