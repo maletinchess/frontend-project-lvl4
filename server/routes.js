@@ -56,6 +56,7 @@ export default (app, defaultState = {}) => {
     });
 
     socket.on('newChannel', (channel, acknowledge = _.noop) => {
+      console.log('channel_from_client:', channel);
       const channelWithId = {
         ...channel,
         removable: true,
