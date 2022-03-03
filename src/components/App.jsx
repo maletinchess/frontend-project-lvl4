@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -17,6 +17,13 @@ import {
   hideModal,
 } from '../slices/modalSlice.js';
 import getModal from './modals/index.js';
+import {
+  addMessage,
+} from '../slices/messageSlice';
+
+import {
+  addChannel, removeChannel, renameChannel,
+} from '../slices/channelSlice';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import '!style-loader!css-loader!react-toastify/dist/ReactToastify.css';
 
@@ -62,16 +69,44 @@ const AuthButton = () => {
   );
 };
 
-const App = (props) => {
+const runSocket = (socketApi, dispatch) => {
+  const mappedAction = {
+    newChannel: addChannel,
+    newMessage: addMessage,
+    removeChannel,
+    renameChannel,
+  };
+
+  socketApi.on('newChannel', (channel) => {
+    dispatch(mappedAction.newChannel(channel));
+  });
+
+  socketApi.on('newMessage', (message) => {
+    dispatch(mappedAction.newMessage(message));
+  });
+
+  socketApi.on('removeChannel', (id) => {
+    dispatch(mappedAction.removeChannel(id));
+  });
+
+  socketApi.on('renameChannel', (data) => {
+    dispatch(mappedAction.renameChannel(data));
+  });
+};
+
+const App = ({ socket }) => {
   const dispatch = useDispatch();
   const modalInfo = useSelector((state) => state.modals.modalInfo);
-  const { socket } = props;
 
   const handleOnHide = () => {
     dispatch(hideModal());
   };
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    runSocket(socket, dispatch);
+  }, []);
 
   return (
     <AuthProvider>

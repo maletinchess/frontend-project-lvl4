@@ -12,11 +12,10 @@ import MessageForm from './MessageForm.jsx';
 import Channels, { ChannelsHeader } from './Channels2.jsx';
 
 import {
-  addMessage, loadMessages,
+  loadMessages,
 } from '../slices/messageSlice';
 
 import {
-  addChannel, removeChannel, renameChannel,
   loadChannels, loadChannelIds,
 } from '../slices/channelSlice';
 
@@ -28,49 +27,6 @@ const getAuthHeader = () => {
   }
 
   return {};
-};
-
-const mappedAction = {
-  newChannel: addChannel,
-  newMessage: addMessage,
-  removeChannel,
-  renameChannel,
-};
-
-const generateSocket = (eventType, socketApi, dispatch) => {
-  socketApi.on(eventType, async (data) => {
-    console.log('socket ON');
-    const action = mappedAction[eventType];
-    await dispatch(action(data));
-  });
-  socketApi.on('connect_error', () => {
-    console.log('SOCKET_ERROR');
-  });
-};
-
-const runSocket = (socketApi, dispatch) => {
-  socketApi.on('newChannel', (channel) => {
-    dispatch(mappedAction.newChannel(channel));
-  });
-
-  socketApi.on('newMessage', (message) => {
-    dispatch(mappedAction.newMessage(message));
-  });
-
-  socketApi.on('removeChannel', (id) => {
-    dispatch(mappedAction.removeChannel(id));
-  });
-
-  socketApi.on('renameChannel', (data) => {
-    dispatch(mappedAction.renameChannel(data));
-  });
-};
-
-const runSocket2 = (socketApi) => {
-  socketApi.on('connect', () => {
-    const { engine } = socketApi.io;
-    console.log(engine.transport.name);
-  });
 };
 
 const Home = ({ socket }) => {
@@ -91,10 +47,6 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-
-    socket.off();
-
-    runSocket2(socket);
   }, []);
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
