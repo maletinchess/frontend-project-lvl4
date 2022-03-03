@@ -5,17 +5,16 @@ import {
 
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import { io } from 'socket.io-client';
 import filter from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { setMessageLoadingState } from '../slices/messageSlice.js';
 
-const socket = io();
 const send = '->';
 
-const MessageForm = () => {
+const MessageForm = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { socket } = props;
   const messageLoadingState = useSelector((state) => state.messages.loading);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
 

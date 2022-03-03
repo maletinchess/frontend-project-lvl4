@@ -9,13 +9,11 @@ import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
 
-import { io } from 'socket.io-client';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Add = (props) => {
-  const socket = io();
   const channelLoadingState = useSelector((state) => state.channels.loading);
-  const { onHide } = props;
+  const { onHide, socket } = props;
 
   const dispatch = useDispatch();
 

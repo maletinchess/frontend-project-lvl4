@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { Provider, ErrorBoundary } from '@rollbar/react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -21,13 +20,13 @@ import getModal from './modals/index.js';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import '!style-loader!css-loader!react-toastify/dist/ReactToastify.css';
 
-const renderModal = ({ modalInfo, hide }) => {
+const renderModal = ({ modalInfo, hide, socket }) => {
   if (!modalInfo.type) {
     return null;
   }
 
   const Component = getModal(modalInfo.type);
-  return <Component onHide={hide} modalInfo={modalInfo} />;
+  return <Component onHide={hide} modalInfo={modalInfo} socket={socket} />;
 };
 
 const AuthProvider = ({ children }) => {
@@ -63,9 +62,10 @@ const AuthButton = () => {
   );
 };
 
-const App = () => {
+const App = (props) => {
   const dispatch = useDispatch();
   const modalInfo = useSelector((state) => state.modals.modalInfo);
+  const { socket } = props;
 
   const handleOnHide = () => {
     dispatch(hideModal());
@@ -81,9 +81,9 @@ const App = () => {
             <Link to="/">{t('header')}</Link>
             <AuthButton />
           </Navbar>
-          {renderModal({ modalInfo, hide: handleOnHide })}
+          {renderModal({ modalInfo, hide: handleOnHide, socket })}
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home socket={socket} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="*" element={<NoMatch />} />

@@ -11,13 +11,14 @@ import Component from './components/App.jsx';
 import store from './slices/index.js';
 
 import i18n from './i18n';
+import socketClient from './socketClient';
 
 import '../assets/application.scss';
 
 ReactDOM.render(
   <I18nextProvider i18n={i18n}>
     <Provider store={store}>
-      <Component />
+      <Component socket={socketClient} />
     </Provider>
   </I18nextProvider>,
   document.querySelector('#chat'),

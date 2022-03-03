@@ -5,7 +5,6 @@ import {
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { io } from 'socket.io-client';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
@@ -49,12 +48,34 @@ const generateSocket = (eventType, socketApi, dispatch) => {
   });
 };
 
-const socket = io();
+const runSocket = (socketApi, dispatch) => {
+  socketApi.on('newChannel', (channel) => {
+    dispatch(mappedAction.newChannel(channel));
+  });
 
-const Home = () => {
+  socketApi.on('newMessage', (message) => {
+    dispatch(mappedAction.newMessage(message));
+  });
+
+  socketApi.on('removeChannel', (id) => {
+    dispatch(mappedAction.removeChannel(id));
+  });
+
+  socketApi.on('renameChannel', (data) => {
+    dispatch(mappedAction.renameChannel(data));
+  });
+};
+
+const runSocket2 = (socketApi) => {
+  socketApi.on('connect', () => {
+    const { engine } = socketApi.io;
+    console.log(engine.transport.name);
+  });
+};
+
+const Home = ({ socket }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   useEffect(() => {
     const userId = JSON.parse(localStorage.getItem('userId'));
 
@@ -73,13 +94,7 @@ const Home = () => {
 
     socket.off();
 
-    generateSocket('newChannel', socket, dispatch);
-
-    generateSocket('newMessage', socket, dispatch);
-
-    generateSocket('removeChannel', socket, dispatch);
-
-    generateSocket('renameChannel', socket, dispatch);
+    runSocket2(socket);
   }, []);
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
@@ -106,7 +121,7 @@ const Home = () => {
           <div className="d-flex flex-column h-100">
             <MessageBoxHeader />
             <MessagesBox />
-            <MessageForm />
+            <MessageForm socket={socket} />
           </div>
         </Col>
       </Row>

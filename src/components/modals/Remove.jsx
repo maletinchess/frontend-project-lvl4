@@ -7,15 +7,14 @@ import { toast } from 'react-toastify';
 import {
   Modal, FormGroup, ButtonGroup, Button,
 } from 'react-bootstrap';
-import { io } from 'socket.io-client';
+
 import { useTranslation } from 'react-i18next';
 
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Remove = (props) => {
-  const { modalInfo, onHide } = props;
+  const { modalInfo, onHide, socket } = props;
   const { id } = modalInfo.item;
-  const socket = io();
 
   const dispatch = useDispatch();
 

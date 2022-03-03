@@ -1,16 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { io } from 'socket.io-client';
-
-const socketApi = io();
-
-export const newChannelThunk = createAsyncThunk(
-  'newChannel',
-  (newChannel) => socketApi.emit('newChannel', newChannel, (r) => {
-    console.log(r);
-  }),
-);
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   channels: [],
@@ -48,13 +38,6 @@ export const channelSlice = createSlice({
     setChannelLoadingState: (state, { payload }) => {
       state.loading = payload;
     },
-  },
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(newChannelThunk.fulfilled, (state, action) => {
-        console.log(action);
-      });
   },
 });
 

@@ -5,13 +5,11 @@ import {
   Modal, FormGroup, FormControl, ButtonGroup, Button,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { io } from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Rename = (props) => {
-  const socket = io();
-  const { onHide, modalInfo } = props;
+  const { onHide, modalInfo, socket } = props;
 
   const dispatch = useDispatch();
 
