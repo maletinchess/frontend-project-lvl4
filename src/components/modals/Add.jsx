@@ -63,7 +63,7 @@ const Add = (props) => {
             />
           </FormGroup>
           <ButtonGroup className="d-flex justify-content-end">
-            <Button className="me-2 btn btn-secondary" onClick={onHide}>
+            <Button className="me-2 btn btn-secondary" onClick="!!!">
               {t('channels.modals.add.footer.cancel')}
             </Button>
             <input disabled={channelLoadingState === 'loading'} type="submit" className="btn btn-primary" value={t('channels.modals.add.footer.submit')} />
