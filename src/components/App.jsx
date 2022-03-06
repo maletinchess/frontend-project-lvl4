@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import authContext from '../contexts/index.jsx';
 import LoginPage from './LoginPage.jsx';
-import SignUpPage from './SignUpPage.jsx';
+import SignUpForm from './SignUp.jsx';
 import Home from './Home.jsx';
 import {
   hideModal,
@@ -129,7 +129,7 @@ const App = ({ socket }) => {
               <Routes>
                 <Route path="/" element={<Home socket={socket} />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/signup" element={<SignUpForm />} />
                 <Route path="*" element={<NoMatch />} />
               </Routes>
             </Router>
