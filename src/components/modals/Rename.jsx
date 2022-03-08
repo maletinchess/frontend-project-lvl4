@@ -36,7 +36,7 @@ const Rename = (props) => {
   });
 
   return (
-    <Modal.Dialog>
+    <Modal show={modalInfo.type === 'renaming'}>
       <Modal.Header closeButton onHide={onHide}>
         <Modal.Title>{t('channels.modals.rename.header')}</Modal.Title>
       </Modal.Header>
@@ -60,7 +60,7 @@ const Rename = (props) => {
           </ButtonGroup>
         </form>
       </Modal.Body>
-    </Modal.Dialog>
+    </Modal>
   );
 };
 

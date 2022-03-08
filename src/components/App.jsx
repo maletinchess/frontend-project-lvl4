@@ -125,7 +125,6 @@ const App = ({ socket }) => {
                 <Link to="/">{t('header')}</Link>
                 <AuthButton />
               </Navbar>
-              {renderModal({ modalInfo, hide: handleOnHide, socket })}
               <Routes>
                 <Route path="/" element={<Home socket={socket} />} />
                 <Route path="/login" element={<LoginPage />} />
@@ -133,6 +132,7 @@ const App = ({ socket }) => {
                 <Route path="*" element={<NoMatch />} />
               </Routes>
             </Router>
+            {renderModal({ modalInfo, hide: handleOnHide, socket })}
             <ToastContainer
               position="top-right"
               autoClose={5000}

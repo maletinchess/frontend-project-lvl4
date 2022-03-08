@@ -36,7 +36,7 @@ const Remove = (props) => {
   };
 
   return (
-    <Modal.Dialog>
+    <Modal show={modalInfo.type === 'removing'}>
       <Modal.Header closeButton onHide={onHide}>
         <Modal.Title>{t('channels.modals.remove.header')}</Modal.Title>
       </Modal.Header>
@@ -54,7 +54,7 @@ const Remove = (props) => {
           </ButtonGroup>
         </form>
       </Modal.Body>
-    </Modal.Dialog>
+    </Modal>
   );
 };
 
