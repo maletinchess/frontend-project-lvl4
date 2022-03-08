@@ -105,7 +105,6 @@ export default (app, defaultState = {}) => {
 
   app.post('/api/v1/signup', async (req, reply) => {
     const username = _.get(req, 'body.username');
-    console.log(username);
     const password = _.get(req, 'body.password');
     const user = state.users.find((u) => u.username === username);
 
