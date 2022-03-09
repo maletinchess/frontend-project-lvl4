@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
@@ -15,6 +15,11 @@ const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const auth = useAuth();
+  const input = useRef();
+
+  useEffect(() => {
+    input.current.focus();
+  }, []);
 
   const errorHandler = (e, setErrors) => {
     if (e.response && e.response.status === 409) {
@@ -91,6 +96,7 @@ const SignUpForm = () => {
                 id="username"
                 autoComplete="username"
                 isInvalid={formik.errors.username && formikTouched}
+                ref={input}
               />
               <Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
             </Form.Group>

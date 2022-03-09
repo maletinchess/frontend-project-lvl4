@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Form, Button, ButtonGroup,
 } from 'react-bootstrap';
@@ -18,13 +18,19 @@ const MessageForm = (props) => {
   const messageLoadingState = useSelector((state) => state.messages.loading);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
 
+  const input = useRef();
+
+  useEffect(() => {
+    input.current.focus();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       body: {
         text: '',
       },
     },
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       dispatch(setMessageLoadingState('loading'));
       const username = localStorage.getItem('username');
       const { text } = values.body;
@@ -38,6 +44,7 @@ const MessageForm = (props) => {
           dispatch(setMessageLoadingState('failed'));
         } else {
           dispatch(setMessageLoadingState('finished'));
+          resetForm();
         }
       });
     },
@@ -51,6 +58,7 @@ const MessageForm = (props) => {
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.body.text}
+            ref={input}
             placeholder={t('messages.inputPlaceholder')}
             name="body.text"
             id="message"

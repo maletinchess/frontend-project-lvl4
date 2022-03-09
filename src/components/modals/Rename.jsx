@@ -1,19 +1,29 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  Modal, FormGroup, FormControl, ButtonGroup, Button,
+  Modal, ButtonGroup, Button, Form,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Rename = (props) => {
   const { onHide, modalInfo, socket } = props;
+  const channels = useSelector((state) => state.channels.channels);
+  const channelsNames = channels.map(({ name }) => name);
 
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
+
+  const validationSchema = Yup.object({
+    body: Yup.string()
+      .min(3, t('errors.notValidChannelName'))
+      .max(20, t('errors.notValidChannelName'))
+      .notOneOf(channelsNames, t('errors.uniqueChannelName')),
+  });
 
   const f = useFormik({
     initialValues: {
@@ -33,6 +43,9 @@ const Rename = (props) => {
       });
       onHide();
     },
+
+    validationSchema,
+    validateOnChange: false,
   });
 
   return (
@@ -41,24 +54,26 @@ const Rename = (props) => {
         <Modal.Title>{t('channels.modals.rename.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form onSubmit={f.handleSubmit}>
-          <FormGroup>
-            <FormControl
+        <Form onSubmit={f.handleSubmit}>
+          <Form.Group>
+            <Form.Control
               data-testid="input-body"
               onChange={f.handleChange}
               value={f.values.body}
               onBlur={f.handleBlur}
               required
               name="body"
+              isInvalid={f.errors.body}
             />
-          </FormGroup>
+            <Form.Control.Feedback type="invalid">{f.errors.body}</Form.Control.Feedback>
+          </Form.Group>
           <ButtonGroup>
             <Button className="me-2 btn btn-secondary" onClick={onHide}>
               {t('channels.modals.rename.footer.cancel')}
             </Button>
             <input type="submit" className="btn btn-primary" value={t('channels.modals.rename.footer.submit')} />
           </ButtonGroup>
-        </form>
+        </Form>
       </Modal.Body>
     </Modal>
   );
