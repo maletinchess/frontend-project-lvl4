@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -22,6 +22,11 @@ const Add = (props) => {
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
+
+  const input = useRef();
+  useEffect(() => {
+    input.current.focus();
+  }, []);
 
   const validationSchema = Yup.object({
     body: Yup.string()
@@ -74,6 +79,7 @@ const Add = (props) => {
             <Form.Control
               data-testid="input-body"
               onChange={f.handleChange}
+              ref={input}
               value={f.values.body}
               onBlur={f.handleBlur}
               required

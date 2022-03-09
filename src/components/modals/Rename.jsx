@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -24,6 +24,12 @@ const Rename = (props) => {
       .max(20, t('errors.notValidChannelName'))
       .notOneOf(channelsNames, t('errors.uniqueChannelName')),
   });
+
+  const input = useRef();
+
+  useEffect(() => {
+    input.current.select();
+  }, []);
 
   const f = useFormik({
     initialValues: {
@@ -59,6 +65,7 @@ const Rename = (props) => {
             <Form.Control
               data-testid="input-body"
               onChange={f.handleChange}
+              ref={input}
               value={f.values.body}
               onBlur={f.handleBlur}
               required
