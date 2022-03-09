@@ -150,4 +150,5 @@ const App = ({ socket }) => {
     </ProviderRollbar>
   );
 };
+
 export default App;
