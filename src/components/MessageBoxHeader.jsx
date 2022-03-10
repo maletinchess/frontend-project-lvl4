@@ -19,7 +19,7 @@ const MessageBoxHeader = () => {
   }
   const currentChannelData = channels.find((ch) => ch.id === currentChannelId);
   const header = `# ${currentChannelData.name}`;
-  const messageCountText = `${messagesCount} ${t('messages.headerInfo')}`;
+  const messageCountText = t('messages.messagesCount.key', { count: messagesCount });
   return header && (
     <div className="bg-light mb-4 p-3 shadow-sm small">
       <h4><b>{header}</b></h4>

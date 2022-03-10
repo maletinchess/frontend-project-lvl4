@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
@@ -15,6 +16,12 @@ const LoginPage = () => {
   const auth = useAuth();
 
   const navigate = useNavigate();
+
+  const input = useRef();
+
+  useEffect(() => {
+    input.current.focus();
+  }, []);
 
   const f = useFormik({
     initialValues: {
@@ -34,6 +41,8 @@ const LoginPage = () => {
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
+          toast.error(t('errors.unauthorized'));
+          input.current.select();
           return;
         }
         throw err;
@@ -55,6 +64,7 @@ const LoginPage = () => {
                 isInvalid={authFailed}
                 id="username"
                 autoComplete="username"
+                ref={input}
                 required
               />
             </Form.Group>

@@ -50,7 +50,11 @@ export default {
     },
     messages: {
       inputPlaceholder: 'Введите сообщение...',
-      headerInfo: 'сообщений',
+      messagesCount: {
+        key_one: '{{count}} сообщениe',
+        key_few: '{{count}} сообщения',
+        key_many: '{{count}} сообщений',
+      },
     },
     errors: {
       network: 'Ошибка сети',
@@ -61,6 +65,7 @@ export default {
       passwordIsNotConfirmed: 'Пароли должны совпадать',
       unknownError: 'неизвестная ошибка',
       wrongPasswordOrUsername: 'Неверные имя пользователя или пароль',
+      unauthorized: 'ошибка авторизации',
       emptyField: 'Обязательное поле',
       uniqueChannelName: 'Должно быть уникальным',
     },
