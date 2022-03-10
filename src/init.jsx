@@ -16,12 +16,10 @@ import store from './slices/index.js';
 
 import '../assets/application.scss';
 
-export default async () => {
+export default async (socketApi = io()) => {
   if (process.env.NODE_ENV !== 'production') {
     localStorage.debug = 'chat:*';
   }
-
-  const socketApi = io();
 
   const instance = i18n.createInstance();
 
