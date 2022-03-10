@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import {
-  Modal, FormGroup, ButtonGroup, Button,
+  Modal, FormGroup, Button,
 } from 'react-bootstrap';
 
 import { useTranslation } from 'react-i18next';
@@ -24,12 +24,12 @@ const Remove = (props) => {
     e.preventDefault();
     dispatch(setChannelLoadingState('loading'));
     socket.emit('removeChannel', { id }, (response) => {
-      if (response.status !== 'ok') {
-        dispatch(setChannelLoadingState('failed'));
-        toast.error(t('errors.networkErrors'));
-      } else {
+      if (response.status === 'ok') {
         dispatch(setChannelLoadingState('finished'));
         toast.success(t('toasts.removeChannel'));
+      } else {
+        dispatch(setChannelLoadingState('failed'));
+        toast.error(t('errors.networkErrors'));
       }
     });
     onHide();
@@ -46,12 +46,12 @@ const Remove = (props) => {
           <FormGroup>
             <p>{t('channels.modals.remove.confirm')}</p>
           </FormGroup>
-          <ButtonGroup className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end">
             <Button className="me-2 btn btn-secondary" onClick={onHide}>
               {t('channels.modals.add.footer.cancel')}
             </Button>
             <input type="submit" className="btn btn-danger" value={t('channels.modals.remove.footer.submit')} />
-          </ButtonGroup>
+          </div>
         </form>
       </Modal.Body>
     </Modal>

@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import filter from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { setMessageLoadingState } from '../slices/messageSlice.js';
 
 const send = '->';
@@ -40,11 +41,13 @@ const MessageForm = (props) => {
         text: filteredText, channelId: currentChannelId, username,
       };
       socket.emit('newMessage', newMessage, (response) => {
-        if (response.status !== 'ok') {
-          dispatch(setMessageLoadingState('failed'));
-        } else {
+        if (response.status === 'ok') {
           dispatch(setMessageLoadingState('finished'));
           resetForm();
+          input.current.focus();
+        } else {
+          dispatch(setMessageLoadingState('failed'));
+          toast.error(t('errors.network'));
         }
       });
     },

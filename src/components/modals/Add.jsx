@@ -43,23 +43,15 @@ const Add = (props) => {
     onSubmit: (values) => {
       dispatch(setChannelLoadingState('loading'));
       const { body } = values;
-      const existedChannel = channelsNames.find((ch) => ch === body);
-      console.log(body, channelsNames, existedChannel);
-
-      try {
-        socket.emit('newChannel', { name: body }, (response) => {
-          if (response.status !== 'ok') {
-            dispatch(setChannelLoadingState('failed'));
-            toast.error(t('errors.networkError'));
-          } else {
-            dispatch(setChannelLoadingState('finished'));
-            toast.success(t('toasts.addChannel'));
-          }
-        });
-      } catch (e) {
-        console.log(e);
-        toast.error((t('errors.networkError')));
-      }
+      socket.emit('newChannel', { name: body }, (response) => {
+        if (response.status === 'ok') {
+          dispatch(setChannelLoadingState('finished'));
+          toast.success(t('toasts.addChannel'));
+        } else {
+          dispatch(setChannelLoadingState('failed'));
+          toast.error(t('errors.networkError'));
+        }
+      });
 
       onHide();
     },

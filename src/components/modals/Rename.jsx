@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Modal, ButtonGroup, Button, Form,
+  Modal, Button, Form,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -39,12 +39,12 @@ const Rename = (props) => {
       dispatch(setChannelLoadingState('loading'));
       socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
         console.log(response);
-        if (response.status !== 'ok') {
-          dispatch(setChannelLoadingState('failed'));
-          toast.error(t('errors.networkError'));
-        } else {
+        if (response.status === 'ok') {
           dispatch(setChannelLoadingState('finished'));
           toast.success(t('toasts.renameChannel'));
+        } else {
+          dispatch(setChannelLoadingState('failed'));
+          toast.error(t('errors.networkError'));
         }
       });
       onHide();
@@ -63,6 +63,7 @@ const Rename = (props) => {
         <Form onSubmit={f.handleSubmit}>
           <Form.Group>
             <Form.Control
+              className="mb-2"
               data-testid="input-body"
               onChange={f.handleChange}
               ref={input}
@@ -74,12 +75,12 @@ const Rename = (props) => {
             />
             <Form.Control.Feedback type="invalid">{f.errors.body}</Form.Control.Feedback>
           </Form.Group>
-          <ButtonGroup>
+          <div className="d-flex justify-content-end">
             <Button className="me-2 btn btn-secondary" onClick={onHide}>
               {t('channels.modals.rename.footer.cancel')}
             </Button>
             <input type="submit" className="btn btn-primary" value={t('channels.modals.rename.footer.submit')} />
-          </ButtonGroup>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>
