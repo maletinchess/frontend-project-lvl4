@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  Form, Button,
+  Form,
 } from 'react-bootstrap';
 
 import { useFormik } from 'formik';
@@ -23,7 +23,7 @@ const MessageForm = (props) => {
 
   useEffect(() => {
     input.current.focus();
-  }, []);
+  }, [currentChannelId]);
 
   const formik = useFormik({
     initialValues: {
@@ -44,20 +44,19 @@ const MessageForm = (props) => {
         if (response.status === 'ok') {
           dispatch(setMessageLoadingState('finished'));
           resetForm();
-          input.current.focus();
         } else {
           dispatch(setMessageLoadingState('failed'));
           toast.error(t('errors.network'));
         }
       });
+      input.current.focus();
     },
   });
 
   return (
     <div className="mt-auto px-5 py-3">
       <Form className="py-1 border-rounded-2" onSubmit={formik.handleSubmit}>
-        <Form.Group>
-          <Form.Label />
+        <Form.Group className="input-group">
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.body.text}
@@ -67,16 +66,15 @@ const MessageForm = (props) => {
             id="message"
             required
             isInvalid={messageLoadingState === 'failed'}
-            className="border-0 p-0 ps-2"
+            className="p-0 ps-2"
           />
-          <Form.Control.Feedback type="invalid">{t('errors.network')}</Form.Control.Feedback>
-          <Button
+          <button
             type="submit"
             className="btn btn-group-vertical"
             disabled={messageLoadingState === 'loading'}
           >
             {send}
-          </Button>
+          </button>
         </Form.Group>
       </Form>
     </div>
