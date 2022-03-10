@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  Form, Button, ButtonGroup,
+  Form, Button,
 } from 'react-bootstrap';
 
 import { useFormik } from 'formik';
@@ -64,18 +64,17 @@ const MessageForm = (props) => {
             id="message"
             required
             isInvalid={messageLoadingState === 'failed'}
+            className="border-0 p-0 ps-2"
           />
-          <Form.Control.Feedback type="invalid">Message sending failed</Form.Control.Feedback>
-        </Form.Group>
-        <ButtonGroup>
+          <Form.Control.Feedback type="invalid">{t('errors.network')}</Form.Control.Feedback>
           <Button
             type="submit"
-            variant="outline-secondary"
+            className="btn btn-group-vertical"
             disabled={messageLoadingState === 'loading'}
           >
             {send}
           </Button>
-        </ButtonGroup>
+        </Form.Group>
       </Form>
     </div>
   );

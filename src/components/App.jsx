@@ -7,7 +7,9 @@ import {
   Routes,
   Link,
 } from 'react-router-dom';
-import { Button, Navbar } from 'react-bootstrap';
+import {
+  Button, Navbar, Container,
+} from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import authContext from '../contexts/index.jsx';
@@ -122,8 +124,10 @@ const App = ({ socket }) => {
           <div className="d-flex flex-column h-100">
             <Router>
               <Navbar bg="light" expand="lg">
-                <Link to="/">{t('header')}</Link>
-                <AuthButton />
+                <Container>
+                  <Navbar.Brand href="/">{t('header')}</Navbar.Brand>
+                  <AuthButton />
+                </Container>
               </Navbar>
               <Routes>
                 <Route path="/" element={<Home socket={socket} />} />

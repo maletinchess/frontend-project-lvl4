@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Modal, ButtonGroup, Button, Form,
+  Modal, Button, Form,
 } from 'react-bootstrap';
 
 import * as Yup from 'yup';
@@ -77,6 +77,7 @@ const Add = (props) => {
         <Form onSubmit={f.handleSubmit}>
           <Form.Group>
             <Form.Control
+              className="mb-2"
               data-testid="input-body"
               onChange={f.handleChange}
               ref={input}
@@ -88,12 +89,18 @@ const Add = (props) => {
             />
             <Form.Control.Feedback type="invalid">{f.errors.body}</Form.Control.Feedback>
           </Form.Group>
-          <ButtonGroup className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end">
             <Button className="me-2 btn btn-secondary" onClick={onHide}>
               {t('channels.modals.add.footer.cancel')}
             </Button>
-            <input disabled={channelLoadingState === 'loading'} type="submit" className="btn btn-primary" value={t('channels.modals.add.footer.submit')} />
-          </ButtonGroup>
+            <Button
+              disabled={channelLoadingState === 'loading'}
+              type="submit"
+              className="btn btn-primary"
+            >
+              {t('channels.modals.add.footer.submit')}
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>
