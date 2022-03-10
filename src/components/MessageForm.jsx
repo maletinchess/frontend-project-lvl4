@@ -71,7 +71,8 @@ const MessageForm = (props) => {
           <button
             type="submit"
             className="btn btn-group-vertical"
-            disabled={messageLoadingState === 'loading'}
+            disabled={(messageLoadingState === 'loading')
+            || (formik.values.body.text === '')}
           >
             {send}
           </button>
