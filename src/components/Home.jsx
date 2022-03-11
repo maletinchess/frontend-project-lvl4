@@ -32,13 +32,13 @@ const getAuthHeader = () => {
 const Home = ({ socket }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userId = JSON.parse(localStorage.getItem('userId'));
+  if (!userId) {
+    navigate('/login');
+  }
+
   useEffect(() => {
-    const userId = JSON.parse(localStorage.getItem('userId'));
-
-    if (!userId) {
-      navigate('/login');
-    }
-
     const fetchContent = async () => {
       try {
         const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
@@ -51,7 +51,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  }, [dispatch]);
+  }, []);
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
   const messageLoadingState = useSelector((state) => state.messages.loading);
