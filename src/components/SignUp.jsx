@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -14,7 +14,6 @@ import useAuth from '../hooks/index.jsx';
 const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const auth = useAuth();
   const input = useRef();
 
@@ -40,7 +39,7 @@ const SignUpForm = () => {
       localStorage.setItem('userId', JSON.stringify(response.data));
       localStorage.setItem('username', response.data.username);
       auth.logIn();
-      navigate('/', { from: location });
+      navigate('/');
     } catch (e) {
       errorHandler(e, setErrors);
     }
