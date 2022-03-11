@@ -36,6 +36,7 @@ const Home = ({ socket }) => {
   console.log(location);
   useEffect(() => {
     const userId = JSON.parse(localStorage.getItem('userId'));
+    console.log(userId);
 
     if (!userId) {
       navigate('/login');
@@ -50,7 +51,7 @@ const Home = ({ socket }) => {
         dispatch(loadMessages(data.messages));
       } catch (e) {
         console.log(e, '!!!!!!', location);
-        navigate('/', { from: location });
+        navigate('/login', { from: location });
       }
     };
 
