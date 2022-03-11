@@ -63,6 +63,7 @@ export default {
       shortPassword: 'Не менее 6 символов',
       notValidChannelName: 'От 3 до 20 символов',
       passwordIsNotConfirmed: 'Пароли должны совпадать',
+      longPassword: '',
       unknownError: 'неизвестная ошибка',
       wrongPasswordOrUsername: 'Неверные имя пользователя или пароль',
       unauthorized: 'ошибка авторизации',
