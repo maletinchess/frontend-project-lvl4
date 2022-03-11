@@ -69,8 +69,8 @@ const LoginPage = () => {
                 ref={input}
                 required
               />
+              <Form.Label htmlFor="username" visuallyHidden>{t('login.placeholder.username')}</Form.Label>
             </Form.Group>
-            <Form.Label htmlFor="username" visuallyHidden>{t('login.placeholder.username')}</Form.Label>
             <Form.Group className="m-1">
               <Form.Control
                 type="password"

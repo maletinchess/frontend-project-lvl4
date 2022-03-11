@@ -98,6 +98,7 @@ const SignUpForm = () => {
                 isInvalid={formik.errors.username && formikTouched}
                 ref={input}
               />
+              <Form.Label htmlFor="username" visuallyHidden>{t('registration.placeholder.username')}</Form.Label>
               <Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="m-1">
@@ -111,6 +112,7 @@ const SignUpForm = () => {
                 autoComplete="password"
                 isInvalid={formik.errors.password && formikTouched}
               />
+              <Form.Label htmlFor="password" visuallyHidden>{t('registration.placeholder.password')}</Form.Label>
               <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="m-1">
@@ -124,6 +126,7 @@ const SignUpForm = () => {
                 autoComplete="confirm-password"
                 isInvalid={formik.errors.passwordConfirm && formikTouched}
               />
+              <Form.Label htmlFor="passwordonfirm" visuallyHidden>{t('registration.placeholder.passwordConfirm')}</Form.Label>
               <Form.Control.Feedback type="invalid">{formik.errors.passwordConfirm}</Form.Control.Feedback>
             </Form.Group>
             <Button type="submit" variant="outline-primary" className="m-1">{t('registration.submitButton')}</Button>
