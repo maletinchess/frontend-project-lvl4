@@ -32,11 +32,11 @@ export default async (socketApi = io()) => {
     });
 
   ReactDOM.render(
-    <I18nextProvider i18n={instance}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <I18nextProvider i18n={instance}>
         <Component socket={socketApi} />
-      </Provider>
-    </I18nextProvider>,
+      </I18nextProvider>
+    </Provider>,
     document.querySelector('#chat'),
   );
   console.log('it works!');
