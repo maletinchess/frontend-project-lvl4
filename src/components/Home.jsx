@@ -47,6 +47,7 @@ const Home = ({ socket }) => {
         dispatch(loadMessages(data.messages));
       } catch (e) {
         console.log(e);
+        navigate('/login');
       }
     };
 
