@@ -46,8 +46,7 @@ const Home = ({ socket }) => {
         dispatch(loadChannels(data.channels));
         dispatch(loadMessages(data.messages));
       } catch (e) {
-        console.log(e);
-        navigate('/login');
+        console.log(e, '!!!!!!');
       }
     };
 
