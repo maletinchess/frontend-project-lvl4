@@ -3,7 +3,7 @@ import {
   Container, Row, Col, Spinner,
 } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
@@ -32,6 +32,8 @@ const getAuthHeader = () => {
 const Home = ({ socket }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   useEffect(() => {
     const userId = JSON.parse(localStorage.getItem('userId'));
 
@@ -47,7 +49,8 @@ const Home = ({ socket }) => {
         dispatch(loadChannels(data.channels));
         dispatch(loadMessages(data.messages));
       } catch (e) {
-        console.log(e, '!!!!!!');
+        console.log(e, '!!!!!!', location);
+        navigate('/', { from: location });
       }
     };
 
