@@ -39,7 +39,7 @@ const Home = ({ socket }) => {
     console.log(userId);
 
     if (!userId) {
-      navigate('/login');
+      navigate('/login', { from: location });
       return;
     }
 
