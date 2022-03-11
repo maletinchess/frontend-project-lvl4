@@ -30,7 +30,7 @@ const LoginPage = () => {
         password: '',
       },
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setErrors }) => {
       try {
         const res = await axios.post(routes.loginPath(), values.body);
         console.log(res.data); // add to localstore or state as username
@@ -43,6 +43,9 @@ const LoginPage = () => {
           setAuthFailed(true);
           toast.error(t('errors.unauthorized'));
           input.current.select();
+          setErrors({
+            password: t('errors.wrongPasswordOrUsername'),
+          });
         }
         throw err;
       }
@@ -81,7 +84,7 @@ const LoginPage = () => {
                 required
               />
               <Form.Label htmlFor="password" visuallyHidden>{t('login.placeholder.password')}</Form.Label>
-              <Form.Control.Feedback type="invalid">{t('errors.wrongPasswordOrUsername')}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{f.errors.password}</Form.Control.Feedback>
             </Form.Group>
             <Button type="submit" variant="outline-primary" className="m-1">{t('login.submitButton')}</Button>
           </Form>
