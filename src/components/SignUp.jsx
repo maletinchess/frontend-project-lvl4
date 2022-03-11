@@ -126,7 +126,7 @@ const SignUpForm = () => {
                 autoComplete="confirm-password"
                 isInvalid={formik.errors.passwordConfirm && formikTouched}
               />
-              <Form.Label htmlFor="passwordonfirm" visuallyHidden>{t('registration.placeholder.passwordConfirm')}</Form.Label>
+              <Form.Label htmlFor="passwordConfirm" visuallyHidden>{t('registration.placeholder.passwordConfirm')}</Form.Label>
               <Form.Control.Feedback type="invalid">{formik.errors.passwordConfirm}</Form.Control.Feedback>
             </Form.Group>
             <Button type="submit" variant="outline-primary" className="m-1">{t('registration.submitButton')}</Button>
