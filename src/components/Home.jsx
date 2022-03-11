@@ -40,14 +40,10 @@ const Home = ({ socket }) => {
     }
 
     const fetchContent = async () => {
-      try {
-        const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
-        dispatch(loadChannelIds(data.currentChannelId));
-        dispatch(loadChannels(data.channels));
-        dispatch(loadMessages(data.messages));
-      } catch (e) {
-        console.log(e, '!!!!!!', e.response.status);
-      }
+      const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
+      dispatch(loadChannelIds(data.currentChannelId));
+      dispatch(loadChannels(data.channels));
+      dispatch(loadMessages(data.messages));
     };
 
     fetchContent();
