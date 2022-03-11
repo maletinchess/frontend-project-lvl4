@@ -68,7 +68,7 @@ const LoginPage = () => {
                 required
               />
             </Form.Group>
-            <Form.Label visuallyHidden>{t('login.placeholder.username')}</Form.Label>
+            <Form.Label htmlFor="username" visuallyHidden>{t('login.placeholder.username')}</Form.Label>
             <Form.Group className="m-1">
               <Form.Control
                 type="password"
@@ -81,7 +81,7 @@ const LoginPage = () => {
                 autoComplete="current-password"
                 required
               />
-              <Form.Label visuallyHidden>{t('login.placeholder.password')}</Form.Label>
+              <Form.Label htmlFor="password" visuallyHidden>{t('login.placeholder.password')}</Form.Label>
               <Form.Control.Feedback type="invalid">{t('errors.wrongPasswordOrUsername')}</Form.Control.Feedback>
             </Form.Group>
             <Button type="submit" variant="outline-primary" className="m-1">{t('login.submitButton')}</Button>
