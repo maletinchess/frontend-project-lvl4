@@ -47,7 +47,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  }, []);
+  }, [dispatch]);
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
   const messageLoadingState = useSelector((state) => state.messages.loading);

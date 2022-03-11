@@ -43,7 +43,6 @@ const LoginPage = () => {
           setAuthFailed(true);
           toast.error(t('errors.unauthorized'));
           input.current.select();
-          return;
         }
         throw err;
       }
