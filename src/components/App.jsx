@@ -6,6 +6,8 @@ import {
   Route,
   Routes,
   Link,
+  Navigate,
+  useLocation,
 } from 'react-router-dom';
 import {
   Button, Navbar, Container,
@@ -72,6 +74,14 @@ const AuthButton = () => {
   );
 };
 
+const PrivateRoute = ({ children }) => {
+  const userId = JSON.parse(localStorage.getItem('userId'));
+  const location = useLocation();
+  return (
+    userId && userId.token ? children : <Navigate to="/login" state={{ from: location }} />
+  );
+};
+
 const runSocket = (socketApi, dispatch) => {
   const mappedAction = {
     newChannel: addChannel,
@@ -130,7 +140,14 @@ const App = ({ socket }) => {
                 </Container>
               </Navbar>
               <Routes>
-                <Route path="/" element={<Home socket={socket} />} />
+                <Route
+                  path="/"
+                  element={(
+                    <PrivateRoute>
+                      <Home socket={socket} />
+                    </PrivateRoute>
+                )}
+                />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpForm />} />
                 <Route path="*" element={<NoMatch />} />
