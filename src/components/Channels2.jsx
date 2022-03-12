@@ -59,8 +59,9 @@ const renderChannel = (channel, switchChannel, currentChannelId, t) => {
           variant={channel.id === currentChannelId ? 'secondary' : ''}
           className="flex-grow-0"
           id="dropdown-split-basic"
-        />
-        <span className="visually-hidden">{t('channels.dropdownHeader')}</span>
+        >
+          <span className="visually-hidden">{t('channels.dropdownHeader')}</span>
+        </Dropdown.Toggle>
 
         <Dropdown.Menu>
           <Dropdown.Item href="#" onClick={handleShowRename}>{t('channels.addChannel')}</Dropdown.Item>
