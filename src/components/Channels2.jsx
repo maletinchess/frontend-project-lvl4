@@ -64,7 +64,7 @@ const renderChannel = (channel, switchChannel, currentChannelId, t) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item href="#" onClick={handleShowRename}>{t('channels.addChannel')}</Dropdown.Item>
+          <Dropdown.Item href="#" onClick={handleShowRename}>{t('channels.renameChannel')}</Dropdown.Item>
           <Dropdown.Item href="#" onClick={handleShowRemove}>{t('channels.removeChannel')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

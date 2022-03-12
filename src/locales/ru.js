@@ -12,7 +12,7 @@ export default {
     logout: 'Выйти',
     channels: {
       channelsHeader: 'Каналы',
-      addChannel: 'Переименовать',
+      renameChannel: 'Переименовать',
       removeChannel: 'Удалить',
       dropdownHeader: 'Управление каналом',
       modals: {
