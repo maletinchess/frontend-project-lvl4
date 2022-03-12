@@ -135,7 +135,7 @@ const App = ({ socket }) => {
             <Router>
               <Navbar bg="light" expand="lg">
                 <Container>
-                  <Navbar.Brand href="/">{t('header')}</Navbar.Brand>
+                  <Navbar.Brand as={Link} to="/">{t('header')}</Navbar.Brand>
                   <AuthButton />
                 </Container>
               </Navbar>

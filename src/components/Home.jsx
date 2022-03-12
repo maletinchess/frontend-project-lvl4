@@ -42,12 +42,12 @@ const Home = ({ socket }) => {
         dispatch(loadMessages(data.messages));
       } catch (e) {
         console.log(e, '!!!!!!', location);
-        navigate('/login', { from: location });
+        navigate('*', { from: location });
       }
     };
 
     fetchContent();
-  }, [dispatch]);
+  }, [location]);
 
   const channelLoadingState = useSelector((state) => state.channels.loading);
   const messageLoadingState = useSelector((state) => state.messages.loading);
