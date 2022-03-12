@@ -70,7 +70,7 @@ const Add = (props) => {
           <Form.Group>
             <Form.Control
               className="mb-2"
-              data-testid="input-body"
+              id="input-body"
               onChange={f.handleChange}
               ref={input}
               value={f.values.body}
@@ -79,6 +79,7 @@ const Add = (props) => {
               name="body"
               isInvalid={f.errors.body}
             />
+            <Form.Label htmlFor="body" visuallyHidden>{t('channels.modals.add.body')}</Form.Label>
             <Form.Control.Feedback type="invalid">{f.errors.body}</Form.Control.Feedback>
           </Form.Group>
           <div className="d-flex justify-content-end">

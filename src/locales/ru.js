@@ -17,6 +17,7 @@ export default {
       modals: {
         add: {
           header: 'Добавить канал',
+          body: 'Имя канала',
           footer: {
             submit: 'Добавить',
             cancel: 'Отменить',
