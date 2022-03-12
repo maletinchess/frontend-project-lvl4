@@ -79,7 +79,7 @@ const Add = (props) => {
               name="body"
               isInvalid={f.errors.body}
             />
-            <Form.Label htmlFor="body" visuallyHidden>{t('channels.modals.add.body')}</Form.Label>
+            <Form.Label htmlFor="input-body" visuallyHidden>{t('channels.modals.add.body')}</Form.Label>
             <Form.Control.Feedback type="invalid">{f.errors.body}</Form.Control.Feedback>
           </Form.Group>
           <div className="d-flex justify-content-end">
