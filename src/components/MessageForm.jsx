@@ -76,6 +76,7 @@ const MessageForm = (props) => {
           >
             {send}
           </button>
+          <Form.Label visuallyHidden htmlFor="message">{t('messages.label')}</Form.Label>
         </Form.Group>
       </Form>
     </div>
