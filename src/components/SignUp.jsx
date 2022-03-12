@@ -70,6 +70,8 @@ const SignUpForm = () => {
 
     onSubmit: submitHandler,
 
+    validateOnChange: false,
+
     initialTouched: {
       username: true,
       password: true,
