@@ -14,6 +14,7 @@ export default {
       channelsHeader: 'Каналы',
       addChannel: 'Переименовать',
       removeChannel: 'Удалить',
+      dropdownHeader: 'Управление каналом',
       modals: {
         add: {
           header: 'Добавить канал',
