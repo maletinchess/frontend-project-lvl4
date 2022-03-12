@@ -51,6 +51,7 @@ export default {
     messages: {
       inputPlaceholder: 'Введите сообщение...',
       label: 'Новое сообщение',
+      send: 'Отправить',
       messagesCount: {
         key_one: '{{count}} сообщениe',
         key_few: '{{count}} сообщения',

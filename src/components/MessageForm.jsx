@@ -68,6 +68,7 @@ const MessageForm = (props) => {
             isInvalid={messageLoadingState === 'failed'}
             className="p-0 ps-2"
           />
+          <Form.Label visuallyHidden htmlFor="message">{t('messages.label')}</Form.Label>
           <button
             type="submit"
             className="btn btn-group-vertical"
@@ -75,8 +76,8 @@ const MessageForm = (props) => {
             || (formik.values.body.text === '')}
           >
             {send}
+            <span className="visually-hidden">{t('messages.send')}</span>
           </button>
-          <Form.Label visuallyHidden htmlFor="message">{t('messages.label')}</Form.Label>
         </Form.Group>
       </Form>
     </div>
