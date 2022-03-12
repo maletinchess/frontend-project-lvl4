@@ -26,6 +26,7 @@ export default {
         },
         rename: {
           header: 'Переименовать канал',
+          body: 'Имя канала',
           footer: {
             submit: 'Переименовать',
             cancel: 'Отменить',
