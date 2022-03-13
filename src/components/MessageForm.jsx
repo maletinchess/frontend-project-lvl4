@@ -36,7 +36,6 @@ const MessageForm = (props) => {
       const username = localStorage.getItem('username');
       const { text } = values.body;
       const filteredText = filter.clean(text);
-      console.log('check filter: ', text, filteredText);
       const newMessage = {
         text: filteredText, channelId: currentChannelId, username,
       };

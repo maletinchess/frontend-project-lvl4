@@ -37,7 +37,9 @@ const Rename = (props) => {
       body: modalInfo.item.body,
     },
     onSubmit: (values) => {
+      console.log('1-!!!!!!');
       dispatch(setChannelLoadingState('loading'));
+      console.log('2-!!!!!!');
       socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
         console.log('rename-channel-response', response);
         if (response.status === 'ok') {

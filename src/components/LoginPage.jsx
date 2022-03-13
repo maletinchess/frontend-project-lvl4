@@ -33,7 +33,6 @@ const LoginPage = () => {
     onSubmit: async (values, { setErrors }) => {
       try {
         const res = await axios.post(routes.loginPath(), values.body);
-        console.log(res.data); // add to localstore or state as username
         localStorage.setItem('userId', JSON.stringify(res.data));
         localStorage.setItem('username', res.data.username);
         auth.logIn();
