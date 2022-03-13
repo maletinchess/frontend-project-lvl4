@@ -39,7 +39,7 @@ const Rename = (props) => {
     onSubmit: (values) => {
       dispatch(setChannelLoadingState('loading'));
       socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
-        console.log(response);
+        console.log('rename-channel-response', response);
         if (response.status === 'ok') {
           dispatch(setChannelLoadingState('finished'));
           toast.success(t('toasts.renameChannel'));

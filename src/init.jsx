@@ -20,7 +20,7 @@ export default async (socketApi = io()) => {
     .init({
       resources,
       fallbackLng: 'ru',
-      debug: true,
+      debug: false,
     });
 
   return (
