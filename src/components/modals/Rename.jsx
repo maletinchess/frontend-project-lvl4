@@ -11,7 +11,6 @@ import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
 const Rename = (props) => {
   const { onHide, modalInfo, socket } = props;
-  console.log(socket.connected);
   const channels = useSelector((state) => state.channels.channels);
   const channelsNames = channels.map(({ name }) => name);
 

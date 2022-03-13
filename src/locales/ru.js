@@ -20,7 +20,7 @@ export default {
           header: 'Добавить канал',
           body: 'Имя канала',
           footer: {
-            submit: 'Добавить',
+            submit: 'Отправить',
             cancel: 'Отменить',
           },
         },
@@ -28,7 +28,7 @@ export default {
           header: 'Переименовать канал',
           body: 'Имя канала',
           footer: {
-            submit: 'Переименовать',
+            submit: 'Отправить',
             cancel: 'Отменить',
           },
         },
