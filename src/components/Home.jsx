@@ -9,7 +9,7 @@ import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
 import MessageForm from './MessageForm.jsx';
-import Channels, { ChannelsHeader } from './Channels2.jsx';
+import Channels, { ChannelsHeader } from './Channels.jsx';
 
 import {
   loadMessages,
