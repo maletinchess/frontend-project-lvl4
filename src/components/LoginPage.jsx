@@ -45,8 +45,9 @@ const LoginPage = () => {
           setErrors({
             password: t('errors.wrongPasswordOrUsername'),
           });
+        } else {
+          toast.error(t('errors.network'));
         }
-        throw err;
       }
     },
   });
