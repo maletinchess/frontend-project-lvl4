@@ -89,7 +89,7 @@ const Add = (props) => {
             <Button
               disabled={channelLoadingState === 'loading'}
               type="submit"
-              className="btn btn-primary"
+              variant="primary"
             >
               {t('channels.modals.add.footer.submit')}
             </Button>

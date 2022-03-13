@@ -12,6 +12,7 @@ import { setChannelLoadingState } from '../../slices/channelSlice.js';
 const Rename = (props) => {
   const { onHide, modalInfo, socket } = props;
   const channels = useSelector((state) => state.channels.channels);
+  const channelLoadingState = useSelector((state) => state.channels.loading);
   const channelsNames = channels.map(({ name }) => name);
 
   const dispatch = useDispatch();
@@ -80,7 +81,13 @@ const Rename = (props) => {
             <Button className="me-2 btn btn-secondary" onClick={onHide}>
               {t('channels.modals.rename.footer.cancel')}
             </Button>
-            <input type="submit" className="btn btn-primary" value={t('channels.modals.rename.footer.submit')} />
+            <Button
+              disabled={channelLoadingState === 'loading'}
+              type="submit"
+              variant="primary"
+            >
+              {t('channels.modals.rename.footer.submit')}
+            </Button>
           </div>
         </Form>
       </Modal.Body>
