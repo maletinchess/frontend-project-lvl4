@@ -122,7 +122,7 @@ const App = ({ socket }) => {
   }, []);
 
   const rollbarConfig = {
-    accessToken: '9671e3800fa04d45be0f1b34555b98d6',
+    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     environment: 'production',
     captureUncaught: true,
   };
