@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
@@ -16,10 +16,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const input = useRef();
-
-  useEffect(() => {
-    input.current.focus();
-  }, []);
 
   const f = useFormik({
     initialValues: {
@@ -64,6 +60,7 @@ const LoginPage = () => {
                 id="username"
                 autoComplete="username"
                 ref={input}
+                autoFocus
                 required
               />
               <Form.Label htmlFor="username" visuallyHidden>{t('login.placeholder.username')}</Form.Label>

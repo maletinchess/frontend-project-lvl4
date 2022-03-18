@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
@@ -17,10 +17,6 @@ const SignUpForm = () => {
   const location = useLocation();
   const auth = useAuth();
   const input = useRef();
-
-  useEffect(() => {
-    input.current.focus();
-  }, []);
 
   const errorHandler = (e, setErrors) => {
     if (e.response && e.response.status === 409) {
@@ -100,6 +96,7 @@ const SignUpForm = () => {
                 autoComplete="username"
                 isInvalid={formik.errors.username && formikTouched}
                 ref={input}
+                autoFocus
               />
               <Form.Label htmlFor="username" visuallyHidden>{t('registration.placeholder.username')}</Form.Label>
               <Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
