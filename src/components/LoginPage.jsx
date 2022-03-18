@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
@@ -9,8 +9,6 @@ import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
 const LoginPage = () => {
-  const [authFailed, setAuthFailed] = useState(false);
-
   const { t } = useTranslation();
 
   const auth = useAuth();
@@ -39,7 +37,6 @@ const LoginPage = () => {
         navigate('/');
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
-          setAuthFailed(true);
           toast.error(t('errors.unauthorized'));
           input.current.select();
           setErrors({
@@ -63,7 +60,7 @@ const LoginPage = () => {
                 value={f.values.body.username}
                 placeholder={t('login.placeholder.username')}
                 name="body.username"
-                isInvalid={authFailed}
+                isInvalid={f.errors.password}
                 id="username"
                 autoComplete="username"
                 ref={input}
@@ -78,7 +75,7 @@ const LoginPage = () => {
                 value={f.values.body.password}
                 placeholder={t('login.placeholder.password')}
                 name="body.password"
-                isInvalid={authFailed}
+                isInvalid={f.errors.password}
                 id="password"
                 autoComplete="current-password"
                 required
