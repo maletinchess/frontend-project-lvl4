@@ -38,8 +38,6 @@ const MessageForm = (props) => {
     input.current.focus();
   }, [currentChannelId]);
 
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
   const sendMessage = (message, resetForm) => {
     socket.emit('newMessage', message, (response) => {
       if (response.status === 'ok') {
@@ -54,7 +52,6 @@ const MessageForm = (props) => {
 
   const submitHandler = async (values, { resetForm }) => {
     dispatch(setMessageLoadingState('loading'));
-    await sleep(5000);
     const username = localStorage.getItem('username');
     const { text } = values.body;
     const filteredText = filter.clean(text);
