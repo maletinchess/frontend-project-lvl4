@@ -1,17 +1,25 @@
 import React from 'react';
 
 import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 
 const MessageBoxHeader = () => {
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
-  const messages = useSelector((state) => state.messages.messages);
+  const all = useSelector((state) => state);
+  const messagesSelector = (state) => state.messages.messages;
 
   const { t } = useTranslation();
 
-  const messagesCount = messages
-    .filter((m) => m.channelId === currentChannelId)
-    .length;
+  const messagesCountSelector = createSelector(
+    messagesSelector,
+    (messages) => messages
+      .filter((message) => message.channelId === currentChannelId)
+      .length,
+  );
+
+  const messagesCount = messagesCountSelector(all);
+
   const channels = useSelector((state) => state.channels.channels);
 
   if (channels.length === 0) {

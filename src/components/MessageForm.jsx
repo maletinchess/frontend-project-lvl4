@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  Form,
+  Form, Spinner,
 } from 'react-bootstrap';
 
 import { useFormik } from 'formik';
@@ -12,12 +12,25 @@ import { setMessageLoadingState } from '../slices/messageSlice.js';
 
 const send = '->';
 
+const renderSubmitButtonContent = ({ messageLoadingState }, fakeSubmitIcon) => {
+  if (messageLoadingState === 'loading') {
+    return (
+      <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+    );
+  }
+  return (
+    <>
+      {fakeSubmitIcon}
+    </>
+  );
+};
+
 const MessageForm = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { socket } = props;
-  const messageLoadingState = useSelector((state) => state.messages.loading);
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
+  const { messageLoadingState } = useSelector((state) => state.messages);
+  const { currentChannelId } = useSelector((state) => state.channels);
 
   const input = useRef();
 
@@ -25,32 +38,44 @@ const MessageForm = (props) => {
     input.current.focus();
   }, [currentChannelId]);
 
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  const sendMessage = (message, resetForm) => {
+    socket.emit('newMessage', message, (response) => {
+      if (response.status === 'ok') {
+        dispatch(setMessageLoadingState('finished'));
+        resetForm();
+      } else {
+        dispatch(setMessageLoadingState('failed'));
+        toast.error(t('errors.network'));
+      }
+    });
+  };
+
+  const submitHandler = async (values, { resetForm }) => {
+    dispatch(setMessageLoadingState('loading'));
+    await sleep(5000);
+    const username = localStorage.getItem('username');
+    const { text } = values.body;
+    const filteredText = filter.clean(text);
+    const newMessage = {
+      text: filteredText, channelId: currentChannelId, username,
+    };
+    await sendMessage(newMessage, resetForm);
+    input.current.focus();
+  };
+
   const formik = useFormik({
     initialValues: {
       body: {
         text: '',
       },
     },
-    onSubmit: (values, { resetForm }) => {
-      dispatch(setMessageLoadingState('loading'));
-      const username = localStorage.getItem('username');
-      const { text } = values.body;
-      const filteredText = filter.clean(text);
-      const newMessage = {
-        text: filteredText, channelId: currentChannelId, username,
-      };
-      socket.emit('newMessage', newMessage, (response) => {
-        if (response.status === 'ok') {
-          dispatch(setMessageLoadingState('finished'));
-          resetForm();
-        } else {
-          dispatch(setMessageLoadingState('failed'));
-          toast.error(t('errors.network'));
-        }
-      });
-      input.current.focus();
-    },
+    onSubmit: submitHandler,
   });
+
+  console.log(formik.isSubmitting);
+  console.log('from message form: ', messageLoadingState);
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -71,10 +96,10 @@ const MessageForm = (props) => {
           <button
             type="submit"
             className="btn btn-group-vertical"
-            disabled={(messageLoadingState === 'loading')
+            disabled={(formik.isSubmitting)
             || (formik.values.body.text === '')}
           >
-            {send}
+            {renderSubmitButtonContent({ messageLoadingState }, send)}
             <span className="visually-hidden">{t('messages.send')}</span>
           </button>
         </Form.Group>

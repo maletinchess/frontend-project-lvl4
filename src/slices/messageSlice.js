@@ -6,7 +6,7 @@ import { removeChannel } from './channelSlice.js';
 
 const initialState = {
   messages: [],
-  loading: 'idle',
+  messageLoadingState: 'idle',
 };
 
 export const messageSlice = createSlice({
@@ -20,7 +20,7 @@ export const messageSlice = createSlice({
       state.messages = payload;
     },
     setMessageLoadingState: (state, { payload }) => {
-      state.loading = payload;
+      state.messageLoadingState = payload;
     },
   },
   extraReducers: (builder) => {

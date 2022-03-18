@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import {
-  Container, Row, Col, Spinner,
+  Container, Row, Col,
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
@@ -49,18 +49,6 @@ const Home = ({ socket }) => {
     fetchContent();
   }, [location]);
 
-  const channelLoadingState = useSelector((state) => state.channels.loading);
-  const messageLoadingState = useSelector((state) => state.messages.loading);
-
-  const UserSpinner = () => {
-    if (channelLoadingState !== 'loading' && messageLoadingState !== 'loading') {
-      return null;
-    }
-    return (
-      <Spinner animation="border" variant="primary" />
-    );
-  };
-
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">
       <Row className="flex-md-row h-100 bg-white">
@@ -69,7 +57,6 @@ const Home = ({ socket }) => {
           <Channels />
         </Col>
         <Col className="p-0 h-100">
-          <UserSpinner />
           <div className="d-flex flex-column h-100">
             <MessageBoxHeader />
             <MessagesBox />
