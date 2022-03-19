@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
+import { addChannel } from '../../socketApi.js';
+
 const Add = (props) => {
   const channelLoadingState = useSelector((state) => state.channels.loading);
   const channels = useSelector((state) => state.channels.channels);
@@ -20,6 +22,7 @@ const Add = (props) => {
   const { onHide, socket, modalInfo } = props;
 
   const dispatch = useDispatch();
+  const setProcessing = (result) => dispatch(setChannelLoadingState(result));
 
   const { t } = useTranslation();
 
@@ -41,18 +44,9 @@ const Add = (props) => {
     },
 
     onSubmit: (values) => {
-      dispatch(setChannelLoadingState('loading'));
+      setProcessing('loading');
       const { body } = values;
-      socket.emit('newChannel', { name: body }, (response) => {
-        if (response.status === 'ok') {
-          dispatch(setChannelLoadingState('finished'));
-          toast.success(t('toasts.addChannel'));
-        } else {
-          dispatch(setChannelLoadingState('failed'));
-          toast.error(t('errors.networkError'));
-        }
-      });
-
+      addChannel({ name: body }, socket, t, toast, setProcessing);
       onHide();
     },
 

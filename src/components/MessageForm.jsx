@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   Form, Spinner,
 } from 'react-bootstrap';
@@ -9,6 +9,7 @@ import filter from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { setMessageLoadingState } from '../slices/messageSlice.js';
+import { sendMessage } from '../socketApi.js';
 
 const send = '->';
 
@@ -27,6 +28,7 @@ const renderSubmitButtonContent = ({ messageLoadingState }, fakeSubmitIcon) => {
 
 const MessageForm = (props) => {
   const dispatch = useDispatch();
+  const setProcessing = (result) => dispatch(setMessageLoadingState(result));
   const { t } = useTranslation();
   const { socket } = props;
   const { messageLoadingState } = useSelector((state) => state.messages);
@@ -34,31 +36,17 @@ const MessageForm = (props) => {
 
   const input = useRef();
 
-  useEffect(() => {
-    input.current.focus();
-  }, [currentChannelId]);
-
-  const sendMessage = (message, resetForm) => {
-    socket.emit('newMessage', message, (response) => {
-      if (response.status === 'ok') {
-        dispatch(setMessageLoadingState('finished'));
-        resetForm();
-      } else {
-        dispatch(setMessageLoadingState('failed'));
-        toast.error(t('errors.network'));
-      }
-    });
-  };
-
-  const submitHandler = async (values, { resetForm }) => {
-    dispatch(setMessageLoadingState('loading'));
+  const submitHandler = async (values, formikBag) => {
+    const { resetForm } = formikBag;
     const username = localStorage.getItem('username');
     const { text } = values.body;
     const filteredText = filter.clean(text);
     const newMessage = {
       text: filteredText, channelId: currentChannelId, username,
     };
-    await sendMessage(newMessage, resetForm);
+    // try-catch errors
+    await sendMessage(newMessage, socket, t, toast, setProcessing);
+    resetForm();
     input.current.focus();
   };
 
@@ -88,6 +76,7 @@ const MessageForm = (props) => {
             required
             isInvalid={messageLoadingState === 'failed'}
             className="p-0 ps-2"
+            autoFocus
           />
           <Form.Label visuallyHidden htmlFor="message">{t('messages.label')}</Form.Label>
           <button
