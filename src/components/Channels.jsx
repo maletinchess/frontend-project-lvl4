@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Nav, Dropdown, Button, ButtonGroup, Spinner,
+  Nav, Dropdown, Button, ButtonGroup,
 } from 'react-bootstrap';
 import {
   setCurrentChannelId,
@@ -13,19 +13,6 @@ import {
 import {
   addModal, removeModal, renameModal,
 } from '../slices/modalSlice.js';
-
-const renderSubmitButtonContent = ({ channelLoadingState }, fakeSubmitIcon) => {
-  if (channelLoadingState === 'loading') {
-    return (
-      <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-    );
-  }
-  return (
-    <>
-      {fakeSubmitIcon}
-    </>
-  );
-};
 
 const renderChannel = (channel, switchChannel, currentChannelId, t) => {
   const NotRemovableChannel = () => (
@@ -97,7 +84,6 @@ const renderChannel = (channel, switchChannel, currentChannelId, t) => {
 
 export const ChannelsHeader = () => {
   const dispatch = useDispatch();
-  const channelLoadingState = useSelector((state) => state.channels.loading);
   const { t } = useTranslation();
   const handleShowAddModal = () => {
     dispatch(addModal());
@@ -107,7 +93,7 @@ export const ChannelsHeader = () => {
     <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
       <span>{t('channels.channelsHeader')}</span>
       <Button className="p-0 text-primary btn-group-vertical" variant="light" onClick={handleShowAddModal}>
-        {renderSubmitButtonContent({ channelLoadingState }, '+')}
+        +
       </Button>
     </div>
   );

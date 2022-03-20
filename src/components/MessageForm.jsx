@@ -4,17 +4,16 @@ import {
 } from 'react-bootstrap';
 
 import { useFormik } from 'formik';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import filter from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { setMessageLoadingState } from '../slices/messageSlice.js';
 import { sendMessage } from '../socketApi.js';
 
 const send = '->';
 
-const renderSubmitButtonContent = ({ messageLoadingState }, fakeSubmitIcon) => {
-  if (messageLoadingState === 'loading') {
+const renderSubmitButtonContent = (isSubmitting, fakeSubmitIcon) => {
+  if (isSubmitting === 'loading') {
     return (
       <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
     );
@@ -27,11 +26,8 @@ const renderSubmitButtonContent = ({ messageLoadingState }, fakeSubmitIcon) => {
 };
 
 const MessageForm = (props) => {
-  const dispatch = useDispatch();
-  const setProcessing = (result) => dispatch(setMessageLoadingState(result));
   const { t } = useTranslation();
   const { socket } = props;
-  const { messageLoadingState } = useSelector((state) => state.messages);
   const { currentChannelId } = useSelector((state) => state.channels);
 
   const input = useRef();
@@ -45,7 +41,7 @@ const MessageForm = (props) => {
       text: filteredText, channelId: currentChannelId, username,
     };
     // try-catch errors
-    await sendMessage(newMessage, socket, t, toast, setProcessing);
+    await sendMessage(newMessage, socket, t, toast);
     resetForm();
     input.current.focus();
   };
@@ -60,7 +56,6 @@ const MessageForm = (props) => {
   });
 
   console.log(formik.isSubmitting);
-  console.log('from message form: ', messageLoadingState);
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -74,7 +69,6 @@ const MessageForm = (props) => {
             name="body.text"
             id="message"
             required
-            isInvalid={messageLoadingState === 'failed'}
             className="p-0 ps-2"
             autoFocus
           />
@@ -85,7 +79,7 @@ const MessageForm = (props) => {
             disabled={(formik.isSubmitting)
             || (formik.values.body.text === '')}
           >
-            {renderSubmitButtonContent({ messageLoadingState }, send)}
+            {renderSubmitButtonContent(formik.isSubmitting, send)}
             <span className="visually-hidden">{t('messages.send')}</span>
           </button>
         </Form.Group>

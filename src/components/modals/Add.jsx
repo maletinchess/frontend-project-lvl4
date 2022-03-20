@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-  Modal, Button, Form,
+  Modal, Button, Form, Spinner,
 } from 'react-bootstrap';
 
 import * as Yup from 'yup';
@@ -11,18 +11,29 @@ import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
 
-import { setChannelLoadingState } from '../../slices/channelSlice.js';
-
 import { addChannel } from '../../socketApi.js';
 
+const renderSubmitButtonContent = (isSubmitting, t) => {
+  const text = t('channels.modals.add.footer.submit');
+  if (isSubmitting) {
+    return (
+      <>
+        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+        <span>{text}</span>
+      </>
+    );
+  }
+  return (
+    <>
+      {text}
+    </>
+  );
+};
+
 const Add = (props) => {
-  const channelLoadingState = useSelector((state) => state.channels.loading);
   const channels = useSelector((state) => state.channels.channels);
   const channelsNames = channels.map(({ name }) => name);
   const { onHide, socket, modalInfo } = props;
-
-  const dispatch = useDispatch();
-  const setProcessing = (result) => dispatch(setChannelLoadingState(result));
 
   const { t } = useTranslation();
 
@@ -30,6 +41,8 @@ const Add = (props) => {
   useEffect(() => {
     input.current.focus();
   }, []);
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   const validationSchema = Yup.object({
     body: Yup.string()
@@ -43,16 +56,18 @@ const Add = (props) => {
       body: '',
     },
 
-    onSubmit: (values) => {
-      setProcessing('loading');
+    onSubmit: async (values) => {
+      await sleep(3000);
       const { body } = values;
-      addChannel({ name: body }, socket, t, toast, setProcessing);
+      await addChannel({ name: body }, socket, t, toast);
       onHide();
     },
 
     validationSchema,
     validateOnChange: false,
   });
+
+  console.log(f.isSubmitting);
 
   return (
     <Modal show={modalInfo.type === 'adding'} centered size="lg">
@@ -81,11 +96,11 @@ const Add = (props) => {
               {t('channels.modals.add.footer.cancel')}
             </Button>
             <Button
-              disabled={channelLoadingState === 'loading'}
+              disabled={f.isSubmitting}
               type="submit"
               variant="primary"
             >
-              {t('channels.modals.add.footer.submit')}
+              {renderSubmitButtonContent(f.isSubmitting, t)}
             </Button>
           </div>
         </Form>

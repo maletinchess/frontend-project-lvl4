@@ -1,4 +1,4 @@
-const generateCallback = (event, t, toast, setProcessing) => (response) => {
+const generateCallback = (event, t, toast) => (response) => {
   const toastSuccess = {
     newMessage: () => {},
     newChannel: () => toast.success(t('toasts.addChannel')),
@@ -7,21 +7,19 @@ const generateCallback = (event, t, toast, setProcessing) => (response) => {
   };
 
   if (response.status === 'ok') {
-    setProcessing('finished');
     toastSuccess[event]();
   } else {
-    setProcessing('failed');
     toast.error(t('errors.network'));
   }
 };
 
-export const sendMessage = (message, socket, t, toast, setProcessing) => {
-  const sendMessageCallback = generateCallback('newMessage', t, toast, setProcessing);
+export const sendMessage = (message, socket, t, toast) => {
+  const sendMessageCallback = generateCallback('newMessage', t, toast);
   socket.emit('newMessage', message, sendMessageCallback);
 };
 
-export const addChannel = (channel, socket, t, toast, setProcessing) => {
-  const addChannelCallback = generateCallback('newChannel', t, toast, setProcessing);
+export const addChannel = (channel, socket, t, toast) => {
+  const addChannelCallback = generateCallback('newChannel', t, toast);
   socket.emit('newChannel', channel, addChannelCallback);
 };
 
