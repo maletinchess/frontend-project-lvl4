@@ -42,8 +42,6 @@ const Add = (props) => {
     input.current.focus();
   }, []);
 
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
   const validationSchema = Yup.object({
     body: Yup.string()
       .min(3, t('errors.notValidChannelName'))
@@ -57,7 +55,6 @@ const Add = (props) => {
     },
 
     onSubmit: async (values) => {
-      await sleep(3000);
       const { body } = values;
       await addChannel({ name: body }, socket, t, toast);
       onHide();
