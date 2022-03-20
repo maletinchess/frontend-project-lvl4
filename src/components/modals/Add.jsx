@@ -54,9 +54,9 @@ const Add = (props) => {
       body: '',
     },
 
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       const { body } = values;
-      await addChannel({ name: body }, socket, t, toast);
+      addChannel({ name: body }, socket, t, toast);
       onHide();
     },
 
