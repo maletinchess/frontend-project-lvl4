@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-
+import { useSelector } from 'react-redux';
 import * as selector from '../selectors.js';
 
 const MessagesBox = () => {
-  const all = selector.useGetState();
-  const messages = selector.messagesSelector(all);
-  const currentChannelId = selector.currentChannelIdSelector(all);
+  const messages = useSelector(selector.messagesSelector);
+  const currentChannelId = useSelector(selector.currentChannelIdSelector);
 
   const filteredMessages = messages.filter((item) => item.channelId === currentChannelId);
   const lastMessage = filteredMessages[messages.length - 1];
@@ -14,6 +13,7 @@ const MessagesBox = () => {
   const scrollToBottom = () => {
     messagesEndref.current?.scrollIntoView();
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages, currentChannelId]);

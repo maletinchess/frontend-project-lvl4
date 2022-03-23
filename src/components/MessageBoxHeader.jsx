@@ -1,13 +1,13 @@
 import React from 'react';
 
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import * as selector from '../selectors.js';
 
 const MessageBoxHeader = () => {
-  const all = selector.useGetState();
-  const currentChannelId = selector.currentChannelIdSelector(all);
-  const messagesCount = selector.messagesCountSelector(currentChannelId)(all);
-  const channels = selector.channelsSelector(all);
+  const currentChannelId = useSelector(selector.currentChannelIdSelector);
+  const messagesCount = useSelector(selector.messagesCountSelector(currentChannelId));
+  const channels = useSelector(selector.channelsSelector);
 
   const { t } = useTranslation();
 

@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Form, Spinner,
 } from 'react-bootstrap';
@@ -31,8 +32,7 @@ const MessageForm = (props) => {
   const { t } = useTranslation();
   const { socket } = props;
 
-  const all = selector.useGetState();
-  const currentChannelId = selector.currentChannelIdSelector(all);
+  const currentChannelId = useSelector(selector.currentChannelIdSelector);
 
   const input = useRef();
 
