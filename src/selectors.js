@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { createSelector } from '@reduxjs/toolkit';
 
-export const getState = () => useSelector((state) => state);
+export const useGetState = () => useSelector((state) => state);
 
 export const allSelector = (state) => state;
 

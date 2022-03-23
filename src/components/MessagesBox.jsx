@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import * as selector from '../selectors.js';
 
 const MessagesBox = () => {
-  const all = selector.getState();
+  const all = selector.useGetState();
   const messages = selector.messagesSelector(all);
   const currentChannelId = selector.currentChannelIdSelector(all);
 

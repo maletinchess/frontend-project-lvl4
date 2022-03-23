@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as selector from '../selectors.js';
 
 const MessageBoxHeader = () => {
-  const all = selector.getState();
+  const all = selector.useGetState();
   const currentChannelId = selector.currentChannelIdSelector(all);
   const messagesCount = selector.messagesCountSelector(currentChannelId)(all);
   const channels = selector.channelsSelector(all);

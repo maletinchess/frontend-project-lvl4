@@ -31,7 +31,7 @@ const MessageForm = (props) => {
   const { t } = useTranslation();
   const { socket } = props;
 
-  const all = selector.getState();
+  const all = selector.useGetState();
   const currentChannelId = selector.currentChannelIdSelector(all);
 
   const input = useRef();
