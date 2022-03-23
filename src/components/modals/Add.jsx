@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 
 import { addChannel } from '../../socketApi.js';
 
+import * as selector from '../../selectors.js';
+
 const renderSubmitButtonContent = (isSubmitting, t) => {
   const text = t('channels.modals.add.footer.submit');
   if (isSubmitting) {
@@ -30,10 +32,9 @@ const renderSubmitButtonContent = (isSubmitting, t) => {
   );
 };
 
-const Add = (props) => {
-  const channels = useSelector((state) => state.channels.channels);
+const Add = ({ onHide, socket, modalInfo }) => {
+  const channels = useSelector(selector.channelsSelector);
   const channelsNames = channels.map(({ name }) => name);
-  const { onHide, socket, modalInfo } = props;
 
   const { t } = useTranslation();
 
@@ -63,8 +64,6 @@ const Add = (props) => {
     validationSchema,
     validateOnChange: false,
   });
-
-  console.log(f.isSubmitting);
 
   return (
     <Modal show={modalInfo.type === 'adding'} centered size="lg">

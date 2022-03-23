@@ -23,13 +23,12 @@ export const addChannel = (channel, socket, t, toast) => {
   socket.emit('newChannel', channel, addChannelCallback);
 };
 
-const socketEmitApi = (event, data, setProcessing, socket, t, toast) => {
-  const mapped = {
-    newMessage: () => sendMessage(data, socket, t, toast, setProcessing),
-    addChannel: () => addChannel(data, socket, t, toast, setProcessing),
-  };
-
-  return mapped[event]();
+export const removeChannel = (id, socket, t, toast) => {
+  const removeChannelCallback = generateCallback('removeChannel', t, toast);
+  socket.emit('removeChannel', { id }, removeChannelCallback);
 };
 
-export default socketEmitApi;
+export const renameChannel = (data, socket, t, toast) => {
+  const renameChannelCallback = generateCallback('renameChannel', t, toast);
+  socket.emit('renameChannel', data, renameChannelCallback);
+};
