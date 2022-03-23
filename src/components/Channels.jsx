@@ -20,7 +20,7 @@ const ChannelManageButton = ({
   channel, t, switchChannel, currentChannelId,
 }) => {
   const { id } = channel;
-  console.log(id);
+  console.log(channel);
 
   const dispatch = useDispatch();
 
