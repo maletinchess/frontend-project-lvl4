@@ -8,10 +8,11 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
+import * as selector from '../../selectors.js';
+import * as socketEmitApi from '../../socketApi.js';
 
-const Rename = (props) => {
-  const { onHide, modalInfo, socket } = props;
-  const channels = useSelector((state) => state.channels.channels);
+const Rename = ({ onHide, modalInfo, socket }) => {
+  const channels = useSelector(selector.channelsSelector);
   const channelsNames = channels.map(({ name }) => name);
 
   const dispatch = useDispatch();
@@ -35,20 +36,13 @@ const Rename = (props) => {
     initialValues: {
       body: modalInfo.item.body,
     },
-    onSubmit: (values) => {
-      console.log('1-!!!!!!');
+    onSubmit: ({ body }) => {
       dispatch(setChannelLoadingState('loading'));
-      console.log('2-!!!!!!');
-      socket.emit('renameChannel', { id: modalInfo.item.id, name: values.body }, (response) => {
-        console.log('rename-channel-response', response);
-        if (response.status === 'ok') {
-          dispatch(setChannelLoadingState('finished'));
-          toast.success(t('toasts.renameChannel'));
-        } else {
-          dispatch(setChannelLoadingState('failed'));
-          toast.error(t('errors.networkError'));
-        }
-      });
+      const data = {
+        id: modalInfo.item.id,
+        name: body,
+      };
+      socketEmitApi.renameChannel(data, socket, t, toast);
       onHide();
     },
 

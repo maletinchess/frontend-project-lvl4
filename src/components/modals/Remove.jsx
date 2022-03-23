@@ -10,10 +10,11 @@ import {
 
 import { useTranslation } from 'react-i18next';
 
+import * as socketEmitApi from '../../socketApi.js';
+
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
 
-const Remove = (props) => {
-  const { modalInfo, onHide, socket } = props;
+const Remove = ({ modalInfo, onHide, socket }) => {
   const { id } = modalInfo.item;
 
   const dispatch = useDispatch();
@@ -23,15 +24,7 @@ const Remove = (props) => {
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(setChannelLoadingState('loading'));
-    socket.emit('removeChannel', { id }, (response) => {
-      if (response.status === 'ok') {
-        dispatch(setChannelLoadingState('finished'));
-        toast.success(t('toasts.removeChannel'));
-      } else {
-        dispatch(setChannelLoadingState('failed'));
-        toast.error(t('errors.networkErrors'));
-      }
-    });
+    socketEmitApi.removeChannel(id, socket, t, toast);
     onHide();
   };
 

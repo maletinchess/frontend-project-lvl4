@@ -14,72 +14,79 @@ import {
   addModal, removeModal, renameModal,
 } from '../slices/modalSlice.js';
 
-const renderChannel = (channel, switchChannel, currentChannelId, t) => {
-  const NotRemovableChannel = () => (
-    <Nav.Item as="li" className="w-100">
+import { channelsSelector, currentChannelIdSelector } from '../selectors.js';
+
+const ChannelManageButton = ({
+  channel, t, switchChannel, currentChannelId,
+}) => {
+  const { id } = channel;
+
+  const dispatch = useDispatch();
+
+  const handleShowRemove = () => {
+    dispatch(removeModal(id));
+  };
+
+  const handleShowRename = () => {
+    dispatch(renameModal({ id, body: channel.name }));
+  };
+
+  return (
+    <Dropdown as={ButtonGroup} className="d-flex">
       <Button
         onClick={() => switchChannel(channel.id)}
         active={channel.id === currentChannelId}
         variant={channel.id === currentChannelId ? 'secondary' : ''}
-        className="w-100 rounded-0 text-start"
+        className="w-100 rounded-0 text-start text-truncate"
       >
         <span className="me-1">#</span>
         {channel.name}
       </Button>
-    </Nav.Item>
+
+      <Dropdown.Toggle
+        split
+        variant={channel.id === currentChannelId ? 'secondary' : ''}
+        className="flex-grow-0"
+        id="dropdown-split-basic"
+      >
+        <span className="visually-hidden">{t('channels.dropdownHeader')}</span>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item href="#" onClick={handleShowRename}>{t('channels.renameChannel')}</Dropdown.Item>
+        <Dropdown.Item href="#" onClick={handleShowRemove}>{t('channels.removeChannel')}</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
   );
+};
 
-  const SplitDropDown = () => {
-    const { id } = channel;
-
-    const dispatch = useDispatch();
-
-    const handleShowRemove = () => {
-      dispatch(removeModal(id));
-    };
-
-    const handleShowRename = () => {
-      dispatch(renameModal({ id, body: channel.name }));
-    };
-
+const renderChannel = (channel, switchChannel, currentChannelId, t) => {
+  if (!channel.removable) {
     return (
-      <Dropdown as={ButtonGroup} className="d-flex">
+      <Nav.Item key={channel.id} as="li" className="w-100">
         <Button
           onClick={() => switchChannel(channel.id)}
           active={channel.id === currentChannelId}
           variant={channel.id === currentChannelId ? 'secondary' : ''}
-          className="w-100 rounded-0 text-start text-truncate"
+          className="w-100 rounded-0 text-start"
         >
           <span className="me-1">#</span>
           {channel.name}
         </Button>
-
-        <Dropdown.Toggle
-          split
-          variant={channel.id === currentChannelId ? 'secondary' : ''}
-          className="flex-grow-0"
-          id="dropdown-split-basic"
-        >
-          <span className="visually-hidden">{t('channels.dropdownHeader')}</span>
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item href="#" onClick={handleShowRename}>{t('channels.renameChannel')}</Dropdown.Item>
-          <Dropdown.Item href="#" onClick={handleShowRemove}>{t('channels.removeChannel')}</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      </Nav.Item>
     );
-  };
+  }
 
-  const RemovableChannel = () => (
-    <Nav.Item as="li" className="w-100">
-      <SplitDropDown />
+  return (
+    <Nav.Item key={channel.id} as="li" className="w-100">
+      <ChannelManageButton
+        t={t}
+        channel={channel}
+        switchChannel={switchChannel}
+        currentChannelId={currentChannelId}
+      />
     </Nav.Item>
   );
-
-  return channel.removable
-    ? <RemovableChannel key={channel.id} />
-    : <NotRemovableChannel key={channel.id} />;
 };
 
 export const ChannelsHeader = () => {
@@ -102,12 +109,8 @@ export const ChannelsHeader = () => {
 const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const channels = useSelector((state) => state.channels.channels);
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
-
-  if (!channels) {
-    return null;
-  }
+  const channels = useSelector(channelsSelector);
+  const currentChannelId = useSelector(currentChannelIdSelector);
 
   const handleSwitchChannel = (id) => {
     dispatch(setCurrentChannelId(id));
