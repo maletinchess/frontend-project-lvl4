@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
 const LoginPage = () => {
@@ -24,13 +23,10 @@ const LoginPage = () => {
         password: '',
       },
     },
-    onSubmit: async (values, { setErrors }) => {
+    onSubmit: async ({ body }, { setErrors }) => {
       try {
-        const res = await axios.post(routes.loginPath(), values.body);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        localStorage.setItem('username', res.data.username);
-        auth.logIn();
-        navigate('/');
+        await auth.signin(axios, body);
+        await navigate('/');
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
           toast.error(t('errors.unauthorized'));

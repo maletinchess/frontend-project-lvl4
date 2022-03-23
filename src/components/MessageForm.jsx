@@ -4,11 +4,12 @@ import {
 } from 'react-bootstrap';
 
 import { useFormik } from 'formik';
-import { useSelector } from 'react-redux';
 import filter from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { sendMessage } from '../socketApi.js';
+import useAuth from '../hooks/index.jsx';
+import * as selector from '../selectors.js';
 
 const send = '->';
 
@@ -26,15 +27,17 @@ const renderSubmitButtonContent = (isSubmitting, fakeSubmitIcon) => {
 };
 
 const MessageForm = (props) => {
+  const auth = useAuth();
   const { t } = useTranslation();
   const { socket } = props;
-  const { currentChannelId } = useSelector((state) => state.channels);
+
+  const all = selector.getState();
+  const currentChannelId = selector.currentChannelIdSelector(all);
 
   const input = useRef();
 
-  const submitHandler = async (values, formikBag) => {
-    const { resetForm } = formikBag;
-    const username = localStorage.getItem('username');
+  const submitHandler = async (values, { resetForm }) => {
+    const username = auth.getUsername();
     const { text } = values.body;
     const filteredText = filter.clean(text);
     const newMessage = {
@@ -54,8 +57,6 @@ const MessageForm = (props) => {
     },
     onSubmit: submitHandler,
   });
-
-  console.log(formik.isSubmitting);
 
   return (
     <div className="mt-auto px-5 py-3">
