@@ -43,7 +43,6 @@ const MessageForm = (props) => {
     const newMessage = {
       text: filteredText, channelId: currentChannelId, username,
     };
-    // try-catch errors
     await sendMessage(newMessage, socket, t, toast);
     resetForm();
     input.current.focus();
