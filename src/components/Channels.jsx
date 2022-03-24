@@ -16,7 +16,19 @@ import {
 
 import { channelsSelector, currentChannelIdSelector } from '../selectors.js';
 
-const ChannelManageButton = ({
+const renderDefaultChannelContent = (channel, currentChannelId, switchChannel) => (
+  <Button
+    onClick={() => switchChannel(channel.id)}
+    active={channel.id === currentChannelId}
+    variant={channel.id === currentChannelId ? 'secondary' : ''}
+    className="w-100 rounded-0 text-start text-truncate"
+  >
+    <span className="me-1">#</span>
+    {channel.name}
+  </Button>
+);
+
+const RemovableChannelContent = ({
   channel, t, switchChannel, currentChannelId,
 }) => {
   const { id } = channel;
@@ -33,16 +45,7 @@ const ChannelManageButton = ({
 
   return (
     <Dropdown as={ButtonGroup} className="d-flex">
-      <Button
-        onClick={() => switchChannel(channel.id)}
-        active={channel.id === currentChannelId}
-        variant={channel.id === currentChannelId ? 'secondary' : ''}
-        className="w-100 rounded-0 text-start text-truncate"
-      >
-        <span className="me-1">#</span>
-        {channel.name}
-      </Button>
-
+      {renderDefaultChannelContent(channel, currentChannelId, switchChannel)}
       <Dropdown.Toggle
         split
         variant={channel.id === currentChannelId ? 'secondary' : ''}
@@ -64,22 +67,14 @@ const renderChannel = (channel, switchChannel, currentChannelId, t) => {
   if (!channel.removable) {
     return (
       <Nav.Item key={channel.id} as="li" className="w-100">
-        <Button
-          onClick={() => switchChannel(channel.id)}
-          active={channel.id === currentChannelId}
-          variant={channel.id === currentChannelId ? 'secondary' : ''}
-          className="w-100 rounded-0 text-start"
-        >
-          <span className="me-1">#</span>
-          {channel.name}
-        </Button>
+        {renderDefaultChannelContent(channel, currentChannelId, switchChannel)}
       </Nav.Item>
     );
   }
 
   return (
     <Nav.Item key={channel.id} as="li" className="w-100">
-      <ChannelManageButton
+      <RemovableChannelContent
         t={t}
         channel={channel}
         switchChannel={switchChannel}
