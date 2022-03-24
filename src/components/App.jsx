@@ -73,7 +73,7 @@ const App = ({ socket }) => {
 
   useEffect(() => {
     socketOnApi(socket, dispatch);
-  }, []);
+  }, [socket, dispatch]);
 
   const rollbarConfig = {
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
