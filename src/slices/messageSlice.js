@@ -13,7 +13,7 @@ export const messageSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    addMessage: (state, { payload }) => {
+    newMessage: (state, { payload }) => {
       state.messages.push(payload);
     },
     loadMessages: (state, { payload }) => {
@@ -30,6 +30,6 @@ export const messageSlice = createSlice({
   },
 });
 
-export const { addMessage, loadMessages, setMessageLoadingState } = messageSlice.actions;
+export const { newMessage, loadMessages, setMessageLoadingState } = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -13,7 +13,7 @@ export const channelSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    addChannel: (state, { payload }) => {
+    newChannel: (state, { payload }) => {
       state.channels.push(payload);
     },
     removeChannel: (state, { payload }) => {
@@ -42,7 +42,7 @@ export const channelSlice = createSlice({
 });
 
 export const {
-  addChannel, loadChannels, removeChannel, renameChannel, loadChannelIds,
+  newChannel, loadChannels, removeChannel, renameChannel, loadChannelIds,
   setCurrentChannelId, setChannelLoadingState,
 } = channelSlice.actions;
 
