@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
 const SignUpForm = () => {
@@ -32,11 +31,8 @@ const SignUpForm = () => {
     const { username, password } = values;
     const body = { username, password };
     try {
-      const response = await axios.post(routes.signupPath(), body);
-      localStorage.setItem('userId', JSON.stringify(response.data));
-      localStorage.setItem('username', response.data.username);
-      auth.logIn();
-      navigate('/', { from: location });
+      await auth.signup(axios, body);
+      await navigate('/', { from: location });
     } catch (e) {
       errorHandler(e, setErrors);
     }
