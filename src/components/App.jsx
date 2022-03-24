@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Provider as ProviderRollbar, ErrorBoundary } from '@rollbar/react';
 import {
@@ -18,6 +18,8 @@ import authContext from '../contexts/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import SignUpForm from './SignUp.jsx';
 import Home from './Home.jsx';
+import AuthProvider from './AuthProvider.jsx';
+
 import {
   hideModal,
 } from '../slices/modalSlice.js';
@@ -25,8 +27,6 @@ import getModal from './modals/index.js';
 import {
   addMessage,
 } from '../slices/messageSlice';
-
-import routes from '../routes.js';
 
 import {
   addChannel, removeChannel, renameChannel,
@@ -41,43 +41,6 @@ const renderModal = ({ modalInfo, hide, socket }) => {
 
   const Component = getModal(modalInfo.type);
   return <Component onHide={hide} modalInfo={modalInfo} socket={socket} />;
-};
-
-const AuthProvider = ({ children }) => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  const [loggedIn, setLoggedIn] = useState(!!userId);
-
-  const getUsername = () => (!userId ? null : userId.username);
-
-  const logIn = () => setLoggedIn(true);
-
-  const signin = async (axios, body) => {
-    const res = await axios.post(routes.loginPath(), body);
-    localStorage.setItem('userId', JSON.stringify(res.data));
-    localStorage.setItem('username', res.data.username);
-    setLoggedIn(true);
-  };
-
-  const signup = async (axios, body) => {
-    const res = await axios.post(routes.signupPath(), body);
-    localStorage.setItem('userId', JSON.stringify(res.data));
-    localStorage.setItem('username', res.data.username);
-    setLoggedIn(true);
-  };
-
-  const logOut = () => {
-    localStorage.removeItem('userId');
-    setLoggedIn(false);
-  };
-
-  return (
-    <authContext.Provider value={{
-      loggedIn, logIn, logOut, getUsername, signin, signup,
-    }}
-    >
-      {children}
-    </authContext.Provider>
-  );
 };
 
 const NoMatch = () => (
