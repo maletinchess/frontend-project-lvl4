@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import * as selector from '../selectors.js';
+import { messagesSelector, currentChannelIdSelector } from '../selectors.js';
 
 const MessagesBox = () => {
-  const messages = useSelector(selector.messagesSelector);
-  const currentChannelId = useSelector(selector.currentChannelIdSelector);
+  const messages = useSelector(messagesSelector);
+  const currentChannelId = useSelector(currentChannelIdSelector);
 
   const filteredMessages = messages.filter((item) => item.channelId === currentChannelId);
   const lastMessage = filteredMessages[messages.length - 1];
