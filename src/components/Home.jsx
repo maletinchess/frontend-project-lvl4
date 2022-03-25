@@ -10,6 +10,7 @@ import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
 import MessageForm from './MessageForm.jsx';
 import Channels, { ChannelsHeader } from './Channels.jsx';
+import useAuth from '../hooks/index.jsx';
 
 import {
   loadMessages,
@@ -19,24 +20,16 @@ import {
   loadChannels, loadChannelIds,
 } from '../slices/channelSlice';
 
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-
-  return {};
-};
-
 const Home = ({ socket }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const auth = useAuth();
+
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
+        const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
         batch(() => {
           dispatch(loadChannelIds(data.currentChannelId));
           dispatch(loadChannels(data.channels));
@@ -49,7 +42,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  }, [location, dispatch, navigate]);
+  }, [location, dispatch, navigate, auth]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">

@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
 
   const getUsername = () => (!userId ? null : userId.username);
 
-  const logIn = () => setLoggedIn(true);
+  const getAuthHeader = () => (userId && userId.token ? { Authorization: `Bearer ${userId.token}` } : {});
 
   const signin = async (axios, body) => {
     const res = await axios.post(routes.loginPath(), body);
@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <authContext.Provider value={{
-      loggedIn, logIn, logOut, getUsername, signin, signup,
+      loggedIn, logOut, getUsername, getAuthHeader, signin, signup,
     }}
     >
       {children}
