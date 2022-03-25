@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, batch } from 'react-redux';
 import routes from '../routes.js';
 import MessagesBox from './MessagesBox.jsx';
 import MessageBoxHeader from './MessageBoxHeader.jsx';
@@ -37,9 +37,11 @@ const Home = ({ socket }) => {
     const fetchContent = async () => {
       try {
         const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
-        dispatch(loadChannelIds(data.currentChannelId));
-        dispatch(loadChannels(data.channels));
-        dispatch(loadMessages(data.messages));
+        batch(() => {
+          dispatch(loadChannelIds(data.currentChannelId));
+          dispatch(loadChannels(data.channels));
+          dispatch(loadMessages(data.messages));
+        });
       } catch (e) {
         navigate('/login', { from: location });
         throw (e);
