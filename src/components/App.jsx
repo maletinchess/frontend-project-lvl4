@@ -19,6 +19,7 @@ import LoginPage from './LoginPage.jsx';
 import SignUpForm from './SignUp.jsx';
 import Home from './Home.jsx';
 import AuthProvider from './AuthProvider.jsx';
+import { selectModalInfo } from '../selectors.js';
 
 import {
   hideModal,
@@ -63,7 +64,7 @@ const PrivateRoute = ({ children }) => {
 
 const App = ({ socket }) => {
   const dispatch = useDispatch();
-  const modalInfo = useSelector((state) => state.modals.modalInfo);
+  const modalInfo = useSelector(selectModalInfo);
 
   const handleOnHide = () => {
     dispatch(hideModal());

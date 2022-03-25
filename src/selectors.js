@@ -1,18 +1,17 @@
-import { useSelector } from 'react-redux';
-
 import { createSelector } from '@reduxjs/toolkit';
 
-export const useGetState = () => useSelector((state) => state);
+export const selectAll = (state) => state;
 
-export const allSelector = (state) => state;
+export const selectMessages = (state) => state.messages.messages;
 
-export const messagesSelector = (state) => state.messages.messages;
+export const selectCurrentChannelId = (state) => state.channels.currentChannelId;
 
-export const messagesCountSelector = (currentChannelId) => createSelector(
-  messagesSelector,
-  (items) => items.filter((message) => message.channelId === currentChannelId).length,
+export const selectCurrentMessages = createSelector(
+  selectMessages,
+  selectCurrentChannelId,
+  (messages, id) => messages.filter((message) => message.channelId === id),
 );
 
-export const currentChannelIdSelector = (state) => state.channels.currentChannelId;
+export const selectChannels = (state) => state.channels.channels;
 
-export const channelsSelector = (state) => state.channels.channels;
+export const selectModalInfo = (state) => state.modals.modalInfo;

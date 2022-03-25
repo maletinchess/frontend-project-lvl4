@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { messagesSelector, currentChannelIdSelector } from '../selectors.js';
+import { selectCurrentMessages, selectCurrentChannelId } from '../selectors.js';
 
 const MessagesBox = () => {
-  const messages = useSelector(messagesSelector);
-  const currentChannelId = useSelector(currentChannelIdSelector);
+  const currentMessages = useSelector(selectCurrentMessages);
+  const currentChannelId = useSelector(selectCurrentChannelId);
 
-  const filteredMessages = messages.filter((item) => item.channelId === currentChannelId);
-  const lastMessage = filteredMessages[messages.length - 1];
+  const lastMessage = currentMessages[currentMessages.length - 1];
 
   const messagesEndref = useRef(lastMessage);
   const scrollToBottom = () => {
@@ -16,16 +15,16 @@ const MessagesBox = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, currentChannelId]);
+  }, [currentMessages, currentChannelId]);
 
   return (
     <div className="chat-messages overflow-auto px-5">
-      {filteredMessages
+      {currentMessages
         .map((item, index) => (
           <div
             className="text-break mb-2"
             key={item.id}
-            ref={index === filteredMessages.length - 1 ? messagesEndref : null}
+            ref={index === currentMessages.length - 1 ? messagesEndref : null}
           >
             <span className="mr-auto">
               <b>{item.username}</b>

@@ -8,11 +8,11 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { setChannelLoadingState } from '../../slices/channelSlice.js';
-import * as selector from '../../selectors.js';
+import { selectChannels } from '../../selectors.js';
 import * as socketEmitApi from '../../socketApi.js';
 
 const Rename = ({ onHide, modalInfo, socket }) => {
-  const channels = useSelector(selector.channelsSelector);
+  const channels = useSelector(selectChannels);
   const channelsNames = channels.map(({ name }) => name);
 
   const dispatch = useDispatch();

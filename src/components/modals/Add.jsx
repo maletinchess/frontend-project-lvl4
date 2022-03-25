@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { addChannel } from '../../socketApi.js';
 
-import * as selector from '../../selectors.js';
+import { selectChannels } from '../../selectors.js';
 
 const renderSubmitButtonContent = (isSubmitting, t) => {
   const text = t('channels.modals.add.footer.submit');
@@ -33,7 +33,7 @@ const renderSubmitButtonContent = (isSubmitting, t) => {
 };
 
 const Add = ({ onHide, socket, modalInfo }) => {
-  const channels = useSelector(selector.channelsSelector);
+  const channels = useSelector(selectChannels);
   const channelsNames = channels.map(({ name }) => name);
 
   const { t } = useTranslation();

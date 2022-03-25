@@ -14,7 +14,7 @@ import {
   addModal, removeModal, renameModal,
 } from '../slices/modalSlice.js';
 
-import { channelsSelector, currentChannelIdSelector } from '../selectors.js';
+import { selectChannels, selectCurrentChannelId } from '../selectors.js';
 
 const renderDefaultChannelContent = (channel, currentChannelId, switchChannel) => (
   <Button
@@ -104,8 +104,8 @@ export const ChannelsHeader = () => {
 const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const channels = useSelector(channelsSelector);
-  const currentChannelId = useSelector(currentChannelIdSelector);
+  const channels = useSelector(selectChannels);
+  const currentChannelId = useSelector(selectCurrentChannelId);
 
   const handleSwitchChannel = (id) => {
     dispatch(setCurrentChannelId(id));

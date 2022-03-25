@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { sendMessage } from '../socketApi.js';
 import useAuth from '../hooks/index.jsx';
-import { currentChannelIdSelector } from '../selectors.js';
+import { selectCurrentChannelId } from '../selectors.js';
 
 const send = '->';
 
@@ -32,7 +32,7 @@ const MessageForm = (props) => {
   const { t } = useTranslation();
   const { socket } = props;
 
-  const currentChannelId = useSelector(currentChannelIdSelector);
+  const currentChannelId = useSelector(selectCurrentChannelId);
 
   const input = useRef();
 

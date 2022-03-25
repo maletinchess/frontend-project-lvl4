@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import * as selector from '../selectors.js';
 
 const MessageBoxHeader = () => {
-  const currentChannelId = useSelector(selector.currentChannelIdSelector);
-  const messagesCount = useSelector(selector.messagesCountSelector(currentChannelId));
-  const channels = useSelector(selector.channelsSelector);
+  const currentChannelId = useSelector(selector.selectCurrentChannelId);
+  const messagesCount = useSelector(selector.selectCurrentMessages).length;
+  const channels = useSelector(selector.selectChannels);
 
   const { t } = useTranslation();
 
