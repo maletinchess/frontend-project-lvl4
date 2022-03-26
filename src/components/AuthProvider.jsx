@@ -11,8 +11,9 @@ const AuthProvider = ({ children }) => {
   const getUsername = () => (!userId ? null : userId.username);
 
   const getAuthHeader = () => {
-    if (userId && userId.token) {
-      return { Authorization: `Bearer ${userId.token}` };
+    const currentUserId = JSON.parse(localStorage.getItem('userId'));
+    if (currentUserId && currentUserId.token) {
+      return { Authorization: `Bearer ${currentUserId.token}` };
     }
     return {};
   };
