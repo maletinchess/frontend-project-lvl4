@@ -105,7 +105,7 @@ const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const channels = useSelector(selectChannels);
-  console.log(channels);
+  console.log('channels - ', channels);
   const currentChannelId = useSelector(selectCurrentChannelId);
 
   const handleSwitchChannel = (id) => {
