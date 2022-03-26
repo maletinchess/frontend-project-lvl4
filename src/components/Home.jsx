@@ -31,6 +31,7 @@ const Home = ({ socket }) => {
       const headers = auth.getAuthHeader();
       try {
         const { data } = await axios.get(routes.usersPath(), { headers });
+        console.log(data);
         batch(() => {
           dispatch(loadChannelIds(data.currentChannelId));
           dispatch(loadChannels(data.channels));
@@ -43,7 +44,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  }, [location, dispatch, navigate]);
+  });
 
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">
