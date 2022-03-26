@@ -57,7 +57,7 @@ const Add = ({ onHide, socket, modalInfo }) => {
 
     onSubmit: async (values) => {
       const { body } = values;
-      await addChannel({ name: body }, socket, t, toast);
+      addChannel({ name: body }, socket, t, toast);
       onHide();
     },
 
