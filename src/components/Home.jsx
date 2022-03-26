@@ -44,7 +44,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  });
+  }, []);
 
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">
