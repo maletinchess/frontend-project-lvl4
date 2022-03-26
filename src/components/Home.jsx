@@ -25,12 +25,11 @@ const Home = ({ socket }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
-  const headers = auth.getAuthHeader();
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const { data } = await axios.get(routes.usersPath(), { headers });
+        const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
         batch(() => {
           dispatch(loadChannelIds(data.currentChannelId));
           dispatch(loadChannels(data.channels));

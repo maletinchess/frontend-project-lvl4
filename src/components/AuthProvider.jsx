@@ -10,13 +10,7 @@ const AuthProvider = ({ children }) => {
 
   const getUsername = () => (!userId ? null : userId.username);
 
-  const getAuthHeader = () => {
-    const currentUserId = JSON.parse(localStorage.getItem('userId'));
-    if (currentUserId && currentUserId.token) {
-      return { Authorization: `Bearer ${currentUserId.token}` };
-    }
-    return {};
-  };
+  const getAuthHeader = () => (userId && userId.token ? { Authorization: `Bearer ${userId.token}` } : {});
 
   const signin = async (axios, body) => {
     const res = await axios.post(routes.loginPath(), body);
