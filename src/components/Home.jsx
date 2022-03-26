@@ -25,13 +25,12 @@ const Home = ({ socket }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
+  const headers = auth.getAuthHeader();
 
   useEffect(() => {
     const fetchContent = async () => {
-      const headers = auth.getAuthHeader();
       try {
         const { data } = await axios.get(routes.usersPath(), { headers });
-        console.log(data);
         batch(() => {
           dispatch(loadChannelIds(data.currentChannelId));
           dispatch(loadChannels(data.channels));
@@ -44,7 +43,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  }, []);
+  }, [dispatch, headers]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">

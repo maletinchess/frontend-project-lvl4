@@ -10,7 +10,12 @@ const AuthProvider = ({ children }) => {
 
   const getUsername = () => (!userId ? null : userId.username);
 
-  const getAuthHeader = () => (userId && userId.token ? { Authorization: `Bearer ${userId.token}` } : {});
+  const getAuthHeader = () => {
+    if (userId && userId.token) {
+      return { Authorization: `Bearer ${userId.token}` };
+    }
+    return {};
+  };
 
   const signin = async (axios, body) => {
     const res = await axios.post(routes.loginPath(), body);
