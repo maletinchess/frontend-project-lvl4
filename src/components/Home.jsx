@@ -43,7 +43,7 @@ const Home = ({ socket }) => {
     };
 
     fetchContent();
-  }, [dispatch, navigate, location, auth]);
+  }, []);
 
   return (
     <Container className="h-100 my-4 overflow-hidden shadow rounded">
