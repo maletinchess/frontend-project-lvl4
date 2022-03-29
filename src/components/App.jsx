@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Provider as ProviderRollbar, ErrorBoundary } from '@rollbar/react';
 import {
@@ -26,7 +26,6 @@ import {
 } from '../slices/modalSlice.js';
 import getModal from './modals/index.js';
 
-import { socketOnApi } from '../socketApi.js';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import '!style-loader!css-loader!react-toastify/dist/ReactToastify.css';
 
@@ -55,10 +54,10 @@ const AuthButton = () => {
 };
 
 const PrivateRoute = ({ children }) => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
+  const auth = useContext(authContext);
   const location = useLocation();
   return (
-    userId && userId.token ? children : <Navigate to="/login" state={{ from: location }} />
+    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 
@@ -71,10 +70,6 @@ const App = ({ socket }) => {
   };
 
   const { t } = useTranslation();
-
-  useEffect(() => {
-    socketOnApi(socket, dispatch);
-  }, [socket, dispatch]);
 
   const rollbarConfig = {
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,

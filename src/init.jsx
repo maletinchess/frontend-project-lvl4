@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import resources from './locales/index.js';
+import { socketOnApi } from './socketApi.js';
 
 import Component from './components/App.jsx';
 import store from './slices/index.js';
@@ -22,6 +23,8 @@ export default async (socketApi = io()) => {
       fallbackLng: 'ru',
       debug: false,
     });
+
+  await socketOnApi(socketApi, store.dispatch);
 
   return (
     <Provider store={store}>
